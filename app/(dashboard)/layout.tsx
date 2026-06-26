@@ -133,7 +133,11 @@ export default function DashboardLayout({
             </Button>
           </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</main>
+        <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="mx-auto w-full max-w-4xl px-4 md:px-6">
+            {children}
+          </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )
