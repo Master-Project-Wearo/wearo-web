@@ -1,3 +1,5 @@
-export default function Page() {
-  return <h1 className="text-2xl font-semibold tracking-tight">Playground</h1>
+import { redirect } from "next/navigation"
+
+export default function PlaygroundPage() {
+  redirect("/playground/new-chat")
 }

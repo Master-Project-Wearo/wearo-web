@@ -1,3 +1,3 @@
-export default function Page() {
+export default function SchedulesPage() {
   return <h1 className="text-2xl font-semibold tracking-tight">Schedules</h1>
 }

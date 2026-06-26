@@ -1,3 +1,3 @@
-export default function Page() {
+export default function AccountPage() {
   return <h1 className="text-2xl font-semibold tracking-tight">Account</h1>
 }

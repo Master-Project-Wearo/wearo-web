@@ -1,3 +1,5 @@
-export default function Page() {
-  return <h1 className="text-2xl font-semibold tracking-tight">Wardrobe</h1>
+import { redirect } from "next/navigation"
+
+export default function WardrobePage() {
+  redirect("/wardrobe/items")
 }

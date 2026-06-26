@@ -97,14 +97,18 @@ export default function DashboardLayout({
             />
             <Breadcrumb>
               <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/">Home</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
                 {breadcrumbs.map((item, index) => {
                   const isLast = index === breadcrumbs.length - 1
 
                   return (
                     <Fragment key={item.href}>
-                      <BreadcrumbItem
-                        className={index === 0 ? "hidden md:block" : undefined}
-                      >
+                      <BreadcrumbItem>
                         {isLast ? (
                           <BreadcrumbPage>{item.label}</BreadcrumbPage>
                         ) : (
@@ -113,9 +117,7 @@ export default function DashboardLayout({
                           </BreadcrumbLink>
                         )}
                       </BreadcrumbItem>
-                      {!isLast ? (
-                        <BreadcrumbSeparator className="hidden md:block" />
-                      ) : null}
+                      {!isLast ? <BreadcrumbSeparator /> : null}
                     </Fragment>
                   )
                 })}
@@ -126,7 +128,7 @@ export default function DashboardLayout({
             <Button
               type="button"
               variant="secondary"
-              className="w-44 justify-start border-none text-muted-foreground sm:w-56"
+              className="w-16 justify-start text-muted-foreground sm:w-56"
             >
               <SearchIcon />
               <span className="truncate">Make a search</span>
