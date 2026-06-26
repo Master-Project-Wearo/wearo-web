@@ -98,7 +98,7 @@ export default function DashboardLayout({
             </Button>
             <Separator
               orientation="vertical"
-              className="md:mr-2 data-vertical:h-4 data-vertical:self-auto"
+              className="lg:mr-2 data-vertical:h-4 data-vertical:self-auto"
             />
             <Breadcrumb>
               {/* Mobile: ... > Current page */}
@@ -148,10 +148,10 @@ export default function DashboardLayout({
           <Button
             type="button"
             variant="secondary"
-            className="mr-4 justify-start text-muted-foreground sm:w-56"
+            className="mr-4 justify-start text-muted-foreground md:w-56"
           >
             <SearchIcon />
-            <span className="hidden truncate sm:block">Make a search</span>
+            <span className="hidden truncate md:block">Make a search</span>
           </Button>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
