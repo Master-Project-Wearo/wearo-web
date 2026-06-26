@@ -26,16 +26,21 @@ export function SignupForm({
   ...props
 }: SignupFormProps) {
   const [state, formAction, pending] = useActionState(signup, {})
+  const [nickname, setNickname] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const nicknameErrors = state.errors?.nickname?.map((message) => ({ message }))
   const emailErrors = state.errors?.email?.map((message) => ({ message }))
   const passwordErrors = state.errors?.password?.map((message) => ({ message }))
   const confirmPasswordErrors = state.errors?.confirmPassword?.map(
     (message) => ({ message })
   )
   const isComplete =
-    email.trim().length > 0 && password.length > 0 && confirmPassword.length > 0
+    nickname.trim().length > 0 &&
+    email.trim().length > 0 &&
+    password.length > 0 &&
+    confirmPassword.length > 0
   const loginHref = redirectTo
     ? `/login?redirect=${encodeURIComponent(redirectTo)}`
     : "/login"
@@ -55,6 +60,30 @@ export function SignupForm({
             Fill in the form below to create your account
           </p>
         </div>
+        <Field data-invalid={Boolean(nicknameErrors)}>
+          <FieldLabel htmlFor="nickname">Nickname</FieldLabel>
+          <Input
+            id="nickname"
+            name="nickname"
+            type="text"
+            value={nickname}
+            onChange={(event) => setNickname(event.target.value)}
+            placeholder="Adrien"
+            required
+            autoComplete="nickname"
+            aria-invalid={Boolean(nicknameErrors)}
+            aria-describedby={
+              nicknameErrors
+                ? "signup-nickname-description signup-nickname-error"
+                : "signup-nickname-description"
+            }
+            className="bg-background"
+          />
+          <FieldDescription id="signup-nickname-description">
+            This name will be displayed in your profile.
+          </FieldDescription>
+          <FieldError id="signup-nickname-error" errors={nicknameErrors} />
+        </Field>
         <Field data-invalid={Boolean(emailErrors)}>
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <Input

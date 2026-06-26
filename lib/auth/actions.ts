@@ -16,6 +16,11 @@ const requiredPasswordSchema = z
   .string({ error: "Password is required." })
   .min(1, { error: "Password is required." })
 
+const nicknameSchema = z
+  .string({ error: "Nickname is required." })
+  .trim()
+  .min(1, { error: "Nickname is required." })
+
 const loginSchema = z.object({
   email: emailSchema,
   password: requiredPasswordSchema,
@@ -23,6 +28,7 @@ const loginSchema = z.object({
 
 const signupSchema = z
   .object({
+    nickname: nicknameSchema,
     email: emailSchema,
     password: requiredPasswordSchema.pipe(
       z.string().min(8, {
@@ -38,7 +44,7 @@ const signupSchema = z
     path: ["confirmPassword"],
   })
 
-type AuthFieldName = "email" | "password" | "confirmPassword"
+type AuthFieldName = "nickname" | "email" | "password" | "confirmPassword"
 
 export type AuthActionState = {
   errors?: Partial<Record<AuthFieldName, string[]>>
@@ -78,6 +84,7 @@ export async function signup(
   formData: FormData
 ): Promise<AuthActionState> {
   const validatedFields = signupSchema.safeParse({
+    nickname: formData.get("nickname"),
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
@@ -87,9 +94,18 @@ export async function signup(
     return { errors: validatedFields.error.flatten().fieldErrors }
   }
 
-  const { email, password } = validatedFields.data
+  const { email, password, nickname } = validatedFields.data
   const supabase = await createClient()
-  const { data, error } = await supabase.auth.signUp({ email, password })
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        nickname,
+        display_name: nickname,
+      },
+    },
+  })
 
   if (error?.code === "weak_password") {
     return { errors: { password: [error.message] } }
@@ -104,6 +120,10 @@ export async function signup(
   }
 
   if (error) {
+    if (error.message.toLowerCase().includes("nickname")) {
+      return { errors: { nickname: [error.message] } }
+    }
+
     return { formError: error.message }
   }
 
