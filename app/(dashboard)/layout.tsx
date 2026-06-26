@@ -73,7 +73,7 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear">
+        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 bg-background">
           <div className="flex min-w-0 items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator
@@ -129,7 +129,7 @@ export default function DashboardLayout({
               className="w-44 justify-start border-none text-muted-foreground sm:w-56"
             >
               <SearchIcon />
-              <span className="truncate">Search...</span>
+              <span className="truncate">Make a search</span>
             </Button>
           </div>
         </header>
