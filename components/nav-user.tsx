@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 
+import { useAuth } from "@/providers/auth-provider"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -27,14 +28,25 @@ import {
   SparklesIcon,
 } from "lucide-react"
 
-const user = {
-  name: "Wearo",
-  email: "dashboard@wearo.app",
-  avatar: "/avatars/wearo.jpg",
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase()
 }
 
 export function NavUser() {
   const { isMobile } = useSidebar()
+  const { user } = useAuth()
+
+  if (!user) {
+    return null
+  }
+
+  const initials = getInitials(user.nickname)
 
   return (
     <SidebarMenu>
@@ -46,11 +58,13 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">WE</AvatarFallback>
+                <AvatarImage src="/avatars/wearo.jpg" alt={user.nickname} />
+                <AvatarFallback className="rounded-lg">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{user.nickname}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDownIcon className="ml-auto size-4" />
@@ -60,11 +74,13 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">WE</AvatarFallback>
+                  <AvatarImage src="/avatars/wearo.jpg" alt={user.nickname} />
+                  <AvatarFallback className="rounded-lg">
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{user.nickname}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
