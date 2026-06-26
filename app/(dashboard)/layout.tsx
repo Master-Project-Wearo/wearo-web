@@ -64,22 +64,21 @@ export default function DashboardLayout({
 }>) {
   const pathname = usePathname()
   const segments = pathname.split("/").filter(Boolean)
-
   const breadcrumbs = segments.map((segment, index) => ({
     href: `/${segments.slice(0, index + 1).join("/")}`,
     label: formatBreadcrumbLabel(segment, segments[index - 1]),
   }))
-
-  const currentPage = breadcrumbs[breadcrumbs.length - 1]
-
   const { resolvedTheme, setTheme } = useTheme()
+  const parentBreadcrumbs = breadcrumbs.slice(0, -1)
+  const currentBreadcrumb = breadcrumbs.at(-1)!
+  const hasParentBreadcrumb = parentBreadcrumbs.length > 0
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
         <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 bg-background">
-          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden px-4">
+          <div className="flex min-w-0 flex-1 items-center gap-2 px-4">
             <SidebarTrigger />
             <Separator
               orientation="vertical"
@@ -101,47 +100,51 @@ export default function DashboardLayout({
               className="lg:mr-2 data-vertical:h-4 data-vertical:self-auto"
             />
             <Breadcrumb>
-              {/* Mobile: ... > Current page */}
-              <BreadcrumbList className="lg:hidden">
-                <BreadcrumbItem>
+              <BreadcrumbList>
+                {/* < lg : ... > lastpage */}
+                <BreadcrumbItem className="lg:hidden">
                   <Button size="icon-sm" variant="ghost">
                     <BreadcrumbEllipsis />
                   </Button>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{currentPage.label}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-              {/* Desktop: Home > Parent page > Current page */}
-              <BreadcrumbList className="hidden lg:flex">
-                <BreadcrumbItem>
+                <BreadcrumbSeparator className="lg:hidden" />
+
+                {/* >= lg : Home */}
+                <BreadcrumbItem className="hidden lg:flex">
                   <BreadcrumbLink asChild>
                     <Link href="/dashboard">Home</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden lg:flex" />
 
-                {breadcrumbs.length > 0 && <BreadcrumbSeparator />}
+                {/* lg -> xl : ... uniquement s'il y a un parent */}
+                {hasParentBreadcrumb && (
+                  <>
+                    <BreadcrumbItem className="hidden lg:flex xl:hidden">
+                      <Button size="icon-sm" variant="ghost">
+                        <BreadcrumbEllipsis />
+                      </Button>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="hidden lg:flex xl:hidden" />
+                  </>
+                )}
 
-                {breadcrumbs.map((item, index) => {
-                  const isLast = index === breadcrumbs.length - 1
+                {/* xl+ : tous les parents */}
+                {parentBreadcrumbs.map((item) => (
+                  <Fragment key={item.href}>
+                    <BreadcrumbItem className="hidden xl:flex">
+                      <BreadcrumbLink asChild>
+                        <Link href={item.href}>{item.label}</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="hidden xl:flex" />
+                  </Fragment>
+                ))}
 
-                  return (
-                    <Fragment key={item.href}>
-                      <BreadcrumbItem>
-                        {isLast ? (
-                          <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink asChild>
-                            <Link href={item.href}>{item.label}</Link>
-                          </BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-
-                      {!isLast && <BreadcrumbSeparator />}
-                    </Fragment>
-                  )
-                })}
+                {/* lastpage, rendue une seule fois */}
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{currentBreadcrumb.label}</BreadcrumbPage>
+                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
