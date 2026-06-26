@@ -3,8 +3,10 @@
 import Link from "next/link"
 import { Fragment } from "react"
 import { usePathname } from "next/navigation"
+import { useTheme } from "next-themes"
 
 import { AppSidebar } from "@/components/app-sidebar"
+import { Button } from "@/components/ui/button"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,6 +21,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { MoonIcon, SearchIcon, SunIcon, PlusIcon } from "lucide-react"
 
 const breadcrumbLabels: Record<string, string> = {
   dashboard: "Dashboard",
@@ -64,14 +67,30 @@ export default function DashboardLayout({
     href: `/${segments.slice(0, index + 1).join("/")}`,
     label: formatBreadcrumbLabel(segment, segments[index - 1]),
   }))
+  const { resolvedTheme, setTheme } = useTheme()
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
+          <div className="flex min-w-0 items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="data-vertical:h-4 data-vertical:self-auto"
+            />
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() =>
+                setTheme(resolvedTheme === "dark" ? "light" : "dark")
+              }
+            >
+              <SunIcon className="hidden dark:block" />
+              <MoonIcon className="dark:hidden" />
+              <span className="sr-only">Toggle Theme</span>
+            </Button>
             <Separator
               orientation="vertical"
               className="mr-2 data-vertical:h-4 data-vertical:self-auto"
@@ -102,6 +121,16 @@ export default function DashboardLayout({
                 })}
               </BreadcrumbList>
             </Breadcrumb>
+          </div>
+          <div className="ml-auto flex items-center gap-2 px-4">
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-44 justify-start border-none text-muted-foreground sm:w-56"
+            >
+              <SearchIcon />
+              <span className="truncate">Search...</span>
+            </Button>
           </div>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</main>
