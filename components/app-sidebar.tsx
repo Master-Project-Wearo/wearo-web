@@ -33,14 +33,10 @@ import {
   MessageCirclePlusIcon,
   PlusIcon,
   ShirtIcon,
-  SparklesIcon,
+  SwatchBookIcon,
 } from "lucide-react"
+
 const data = {
-  user: {
-    name: "Wearo",
-    email: "dashboard@wearo.app",
-    avatar: "/avatars/wearo.jpg",
-  },
   teams: [
     {
       name: "Wearo",
@@ -50,16 +46,19 @@ const data = {
   ],
   quickCreateItems: [
     {
-      title: "New item",
+      title: "Item",
       url: "/wardrobe/items/new",
+      icon: <ShirtIcon />,
     },
     {
-      title: "New outfit",
+      title: "Outfit",
       url: "/wardrobe/outfits/new",
+      icon: <SwatchBookIcon />,
     },
     {
-      title: "New schedule",
+      title: "Schedule",
       url: "/wardrobe/schedules/new",
+      icon: <CalendarDaysIcon />,
     },
   ],
   navGroups: [
@@ -74,7 +73,7 @@ const data = {
         {
           title: "Outfits",
           url: "/wardrobe/outfits",
-          icon: <SparklesIcon />,
+          icon: <SwatchBookIcon />,
         },
         {
           title: "Schedules",
@@ -135,13 +134,12 @@ function PrimaryMenu() {
             <DropdownMenuContent
               side={isMobile ? "bottom" : "right"}
               align="start"
-              sideOffset={4}
-              className="w-52"
             >
               <DropdownMenuLabel>Create</DropdownMenuLabel>
               {data.quickCreateItems.map((item) => (
                 <DropdownMenuItem key={item.title} asChild>
                   <Link href={item.url}>
+                    {item.icon}
                     <span>{item.title}</span>
                   </Link>
                 </DropdownMenuItem>
@@ -173,7 +171,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain groups={data.navGroups} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

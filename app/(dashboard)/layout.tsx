@@ -22,6 +22,8 @@ import {
 
 const breadcrumbLabels: Record<string, string> = {
   dashboard: "Dashboard",
+  account: "Account",
+  settings: "Settings",
   wardrobe: "Wardrobe",
   items: "Items",
   outfits: "Outfits",
