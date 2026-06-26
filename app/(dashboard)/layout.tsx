@@ -117,7 +117,7 @@ export default function DashboardLayout({
               <BreadcrumbList className="hidden lg:flex">
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href="/">Home</Link>
+                    <Link href="/dashboard">Home</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
 
@@ -148,10 +148,10 @@ export default function DashboardLayout({
           <Button
             type="button"
             variant="secondary"
-            className="mr-4 justify-start text-muted-foreground md:w-56"
+            className="mr-4 justify-start text-muted-foreground lg:w-56"
           >
             <SearchIcon />
-            <span className="hidden truncate md:block">Make a search</span>
+            <span className="hidden truncate lg:block">Make a search</span>
           </Button>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
