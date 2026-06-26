@@ -1,178 +1,165 @@
 "use client"
 
+import Link from "next/link"
 import * as React from "react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar"
-import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon } from "lucide-react"
-
-// This is sample data.
+import {
+  BotMessageSquareIcon,
+  CalendarDaysIcon,
+  GalleryVerticalEndIcon,
+  LayoutDashboardIcon,
+  MessageCirclePlusIcon,
+  PlusIcon,
+  ShirtIcon,
+  SparklesIcon,
+} from "lucide-react"
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Wearo",
+    email: "dashboard@wearo.app",
+    avatar: "/avatars/wearo.jpg",
   },
   teams: [
     {
-      name: "Acme Inc",
-      logo: (
-        <GalleryVerticalEndIcon
-        />
-      ),
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: (
-        <AudioLinesIcon
-        />
-      ),
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: (
-        <TerminalIcon
-        />
-      ),
-      plan: "Free",
+      name: "Wearo",
+      logo: <GalleryVerticalEndIcon />,
+      plan: "Wardrobe",
     },
   ],
-  navMain: [
+  quickCreateItems: [
     {
-      title: "Playground",
-      url: "#",
-      icon: (
-        <TerminalSquareIcon
-        />
-      ),
-      isActive: true,
+      title: "New item",
+      url: "/wardrobe/items/new",
+    },
+    {
+      title: "New outfit",
+      url: "/wardrobe/outfits/new",
+    },
+    {
+      title: "New schedule",
+      url: "/wardrobe/schedules/new",
+    },
+  ],
+  navGroups: [
+    {
+      label: "Wardrobe",
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Items",
+          url: "/wardrobe/items",
+          icon: <ShirtIcon />,
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Outfits",
+          url: "/wardrobe/outfits",
+          icon: <SparklesIcon />,
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Schedules",
+          url: "/wardrobe/schedules",
+          icon: <CalendarDaysIcon />,
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: (
-        <BotIcon
-        />
-      ),
+      label: "Playground",
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "New chat",
+          url: "/playground/new-chat",
+          icon: <MessageCirclePlusIcon />,
         },
         {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: (
-        <BookOpenIcon
-        />
-      ),
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
+          title: "Conversations",
+          icon: <BotMessageSquareIcon />,
+          children: [
+            {
+              title: "All conversations",
+              url: "/playground/conversations",
+            },
+            {
+              title: "Capsule office",
+              url: "/playground/conversations/capsule-office",
+            },
+            {
+              title: "Weekend rain",
+              url: "/playground/conversations/rainy-weekend",
+            },
+            {
+              title: "Dinner casual chic",
+              url: "/playground/conversations/date-night",
+            },
+          ],
         },
       ],
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: (
-        <FrameIcon
-        />
-      ),
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: (
-        <PieChartIcon
-        />
-      ),
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: (
-        <MapIcon
-        />
-      ),
-    },
-  ],
+}
+
+function PrimaryMenu() {
+  const { isMobile } = useSidebar()
+
+  return (
+    <SidebarGroup>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton tooltip="Create">
+                <PlusIcon />
+                <span>Create</span>
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              side={isMobile ? "bottom" : "right"}
+              align="start"
+              sideOffset={4}
+              className="w-52"
+            >
+              <DropdownMenuLabel>Create</DropdownMenuLabel>
+              {data.quickCreateItems.map((item) => (
+                <DropdownMenuItem key={item.title} asChild>
+                  <Link href={item.url}>
+                    <span>{item.title}</span>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip="Dashboard">
+            <Link href="/dashboard">
+              <LayoutDashboardIcon />
+              <span>Dashboard</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarGroup>
+  )
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -182,8 +169,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <PrimaryMenu />
+        <NavMain groups={data.navGroups} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
