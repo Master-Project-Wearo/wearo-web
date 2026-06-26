@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 
-import { useAuth } from "@/providers/auth-provider"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -20,6 +19,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { logout } from "@/lib/auth/actions"
+import { useAuth, type AuthUser } from "@/providers/auth-provider"
 import {
   BadgeCheckIcon,
   ChevronsUpDownIcon,
@@ -38,6 +38,27 @@ function getInitials(name: string) {
     .toUpperCase()
 }
 
+function UserSummary({ user }: { user: AuthUser }) {
+  const initials = getInitials(user.nickname)
+
+  return (
+    <>
+      <Avatar className="h-8 w-8 rounded-lg">
+        <AvatarImage src="/avatars/wearo.jpg" alt={user.nickname} />
+        <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+      </Avatar>
+      <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
+        <span className="truncate font-medium text-foreground">
+          {user.nickname}
+        </span>
+        <span className="truncate text-xs text-muted-foreground">
+          {user.email}
+        </span>
+      </div>
+    </>
+  )
+}
+
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { user } = useAuth()
@@ -45,8 +66,6 @@ export function NavUser() {
   if (!user) {
     return null
   }
-
-  const initials = getInitials(user.nickname)
 
   return (
     <SidebarMenu>
@@ -57,32 +76,14 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src="/avatars/wearo.jpg" alt={user.nickname} />
-                <AvatarFallback className="rounded-lg">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.nickname}</span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
+              <UserSummary user={user} />
               <ChevronsUpDownIcon className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent side={isMobile ? "bottom" : "right"} align="end">
-            <DropdownMenuLabel className="p-0 font-normal">
+            <DropdownMenuLabel className="p-0 font-normal text-foreground">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src="/avatars/wearo.jpg" alt={user.nickname} />
-                  <AvatarFallback className="rounded-lg">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.nickname}</span>
-                  <span className="truncate text-xs">{user.email}</span>
-                </div>
+                <UserSummary user={user} />
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
