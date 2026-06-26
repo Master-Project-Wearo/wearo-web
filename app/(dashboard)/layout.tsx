@@ -9,6 +9,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { Button } from "@/components/ui/button"
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -63,10 +64,14 @@ export default function DashboardLayout({
 }>) {
   const pathname = usePathname()
   const segments = pathname.split("/").filter(Boolean)
+
   const breadcrumbs = segments.map((segment, index) => ({
     href: `/${segments.slice(0, index + 1).join("/")}`,
     label: formatBreadcrumbLabel(segment, segments[index - 1]),
   }))
+
+  const currentPage = breadcrumbs[breadcrumbs.length - 1]
+
   const { resolvedTheme, setTheme } = useTheme()
 
   return (
@@ -74,8 +79,8 @@ export default function DashboardLayout({
       <AppSidebar />
       <SidebarInset>
         <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 bg-background">
-          <div className="flex min-w-0 items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
+          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden px-4">
+            <SidebarTrigger />
             <Separator
               orientation="vertical"
               className="data-vertical:h-4 data-vertical:self-auto"
@@ -93,16 +98,31 @@ export default function DashboardLayout({
             </Button>
             <Separator
               orientation="vertical"
-              className="mr-2 data-vertical:h-4 data-vertical:self-auto"
+              className="md:mr-2 data-vertical:h-4 data-vertical:self-auto"
             />
             <Breadcrumb>
-              <BreadcrumbList>
+              {/* Mobile: ... > Current page */}
+              <BreadcrumbList className="lg:hidden">
+                <BreadcrumbItem>
+                  <Button size="icon-sm" variant="ghost">
+                    <BreadcrumbEllipsis />
+                  </Button>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{currentPage.label}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+              {/* Desktop: Home > Parent page > Current page */}
+              <BreadcrumbList className="hidden lg:flex">
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Link href="/">Home</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
+
+                {breadcrumbs.length > 0 && <BreadcrumbSeparator />}
+
                 {breadcrumbs.map((item, index) => {
                   const isLast = index === breadcrumbs.length - 1
 
@@ -117,28 +137,25 @@ export default function DashboardLayout({
                           </BreadcrumbLink>
                         )}
                       </BreadcrumbItem>
-                      {!isLast ? <BreadcrumbSeparator /> : null}
+
+                      {!isLast && <BreadcrumbSeparator />}
                     </Fragment>
                   )
                 })}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="ml-auto flex items-center gap-2 px-4">
-            <Button
-              type="button"
-              variant="secondary"
-              className="w-16 justify-start text-muted-foreground sm:w-56"
-            >
-              <SearchIcon />
-              <span className="truncate">Make a search</span>
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="secondary"
+            className="mr-4 justify-start text-muted-foreground sm:w-56"
+          >
+            <SearchIcon />
+            <span className="hidden truncate sm:block">Make a search</span>
+          </Button>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="mx-auto w-full max-w-4xl px-4 md:px-6">
-            {children}
-          </div>
+          <div className="mx-auto w-full max-w-4xl px-4">{children}</div>
         </main>
       </SidebarInset>
     </SidebarProvider>
