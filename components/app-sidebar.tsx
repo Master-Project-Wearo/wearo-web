@@ -134,6 +134,7 @@ function PrimaryMenu() {
             <DropdownMenuContent
               side={isMobile ? "bottom" : "right"}
               align="start"
+              className="w-56"
             >
               <DropdownMenuLabel>Create</DropdownMenuLabel>
               {data.quickCreateItems.map((item) => (

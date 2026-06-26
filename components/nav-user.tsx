@@ -80,7 +80,11 @@ export function NavUser() {
               <ChevronsUpDownIcon className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side={isMobile ? "bottom" : "right"} align="end">
+          <DropdownMenuContent
+            side={isMobile ? "bottom" : "right"}
+            align="end"
+            className="w-56"
+          >
             <DropdownMenuLabel className="p-0 font-normal text-foreground">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <UserSummary user={user} />
