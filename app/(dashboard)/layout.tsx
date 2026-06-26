@@ -157,8 +157,10 @@ export default function DashboardLayout({
             <span className="hidden truncate lg:block">Make a search</span>
           </Button>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="mx-auto w-full max-w-4xl px-4">{children}</div>
+        <main className="flex-1">
+          <div className="mx-auto flex h-full w-full max-w-3xl flex-col p-4">
+            {children}
+          </div>
         </main>
       </SidebarInset>
     </SidebarProvider>
