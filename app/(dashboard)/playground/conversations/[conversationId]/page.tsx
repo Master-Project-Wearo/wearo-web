@@ -1,10 +1,12 @@
 import { ContentWrapper } from "@/components/content-wrapper"
+import { MessageComposer } from "@/components/message-composer"
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble"
 import {
   InputGroup,
   InputGroupTextarea,
   InputGroupAddon,
   InputGroupButton,
+  InputGroupText,
 } from "@/components/ui/input-group"
 import {
   Item,
@@ -13,8 +15,9 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item"
+import { Kbd } from "@/components/ui/kbd"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { ArrowRight, Plus } from "lucide-react"
+import { ArrowRight, Mic, Plus } from "lucide-react"
 
 export default function ConversationPage() {
   return (
@@ -192,31 +195,7 @@ export default function ConversationPage() {
         </ContentWrapper>
       </ScrollArea>
       <ContentWrapper>
-        <InputGroup>
-          <InputGroupTextarea
-            placeholder="Poser une question sur son dressing"
-            className="resize-none"
-          />
-
-          <InputGroupAddon align="block-end">
-            <InputGroupButton
-              size="icon-sm"
-              variant="secondary"
-              aria-label="Ajouter"
-            >
-              <Plus />
-            </InputGroupButton>
-
-            <InputGroupButton
-              variant="default"
-              size="sm"
-              className="ml-auto"
-              aria-label="Envoyer"
-            >
-              <ArrowRight />
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
+        <MessageComposer />
       </ContentWrapper>
     </>
   )
