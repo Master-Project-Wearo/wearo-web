@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Fragment } from "react"
 import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
-
 import { AppSidebar } from "@/components/app-sidebar"
 import { Button } from "@/components/ui/button"
 import {
@@ -76,8 +75,8 @@ export default function DashboardLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 bg-background">
+      <SidebarInset className="flex h-svh flex-col overflow-hidden">
+        <header className="flex h-14 shrink-0 items-center gap-2 bg-background">
           <div className="flex min-w-0 flex-1 items-center gap-2 px-4">
             <SidebarTrigger />
             <Separator
@@ -157,11 +156,7 @@ export default function DashboardLayout({
             <span className="hidden truncate lg:block">Make a search</span>
           </Button>
         </header>
-        <main className="flex-1">
-          <div className="mx-auto flex h-full w-full max-w-3xl flex-col p-4">
-            {children}
-          </div>
-        </main>
+        {children}
       </SidebarInset>
     </SidebarProvider>
   )
