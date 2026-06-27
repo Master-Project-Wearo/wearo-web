@@ -9,7 +9,10 @@ export function ContentWrapper({
 }: ContentWrapperProps) {
   return (
     <div className="flex w-full items-center justify-center">
-      <div className={cn("w-full max-w-3xl p-4", className)} {...props}>
+      <div
+        className={cn("flex w-full max-w-3xl flex-col gap-8 p-4", className)}
+        {...props}
+      >
         {children}
       </div>
     </div>

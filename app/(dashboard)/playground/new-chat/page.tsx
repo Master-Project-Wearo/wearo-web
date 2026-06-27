@@ -9,8 +9,8 @@ export default function NewChatPage() {
 
   return (
     <div className="flex flex-1 items-center justify-center">
-      <ContentWrapper className="flex flex-col items-center gap-8">
-        <h1 className="text-2xl font-medium">
+      <ContentWrapper className="items-center">
+        <h1>
           Salut <span className="text-primary">{user?.nickname}</span>, une
           question ?
         </h1>

@@ -2,28 +2,18 @@ import { ContentWrapper } from "@/components/content-wrapper"
 import { MessageComposer } from "@/components/message-composer"
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble"
 import {
-  InputGroup,
-  InputGroupTextarea,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupText,
-} from "@/components/ui/input-group"
-import {
   Item,
-  ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item"
-import { Kbd } from "@/components/ui/kbd"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { ArrowRight, Mic, Plus } from "lucide-react"
 
 export default function ConversationPage() {
   return (
     <>
       <ScrollArea className="min-h-0 w-full flex-1">
-        <ContentWrapper className="flex flex-col gap-12">
+        <ContentWrapper>
           <Bubble align="end">
             <BubbleContent>
               Je veux une tenue propre pour sortir en ville ce week-end.
