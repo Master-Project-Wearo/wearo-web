@@ -62,7 +62,9 @@ export function ListingHeader({
             </Button>
           )}
         </div>
-        {description && <p className="text-muted-foreground">{description}</p>}
+        {description && (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        )}
       </div>
       <div className="flex gap-2">
         <InputGroup>
