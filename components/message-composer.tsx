@@ -3,9 +3,7 @@ import {
   InputGroupTextarea,
   InputGroupAddon,
   InputGroupButton,
-  InputGroupText,
 } from "@/components/ui/input-group"
-import { Kbd } from "@/components/ui/kbd"
 import { ArrowRight, Mic, Plus } from "lucide-react"
 
 export function MessageComposer() {
@@ -15,7 +13,6 @@ export function MessageComposer() {
         placeholder="Poser une question sur son dressing"
         className="resize-none"
       />
-
       <InputGroupAddon align="block-end">
         <InputGroupButton
           size="icon-sm"
@@ -24,13 +21,6 @@ export function MessageComposer() {
         >
           <Plus />
         </InputGroupButton>
-
-        <InputGroupText className="ml-2">
-          Commandes
-          <Kbd>/outfit</Kbd>
-          <Kbd>/schedule</Kbd>
-        </InputGroupText>
-
         <InputGroupButton
           size="icon-sm"
           variant="ghost"
@@ -39,7 +29,6 @@ export function MessageComposer() {
         >
           <Mic />
         </InputGroupButton>
-
         <InputGroupButton variant="default" size="sm" aria-label="Envoyer">
           <ArrowRight />
         </InputGroupButton>

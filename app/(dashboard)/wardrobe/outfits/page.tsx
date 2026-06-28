@@ -7,7 +7,7 @@ import { Plus } from "lucide-react"
 
 export default function OutfitsPage() {
   return (
-    <ScrollArea className="min-h-0 w-full flex-1">
+    <ScrollArea>
       <ContentWrapper>
         <ListingHeader
           title="Outfits"

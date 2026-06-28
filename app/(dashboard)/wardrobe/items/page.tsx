@@ -23,7 +23,7 @@ const items = [
 
 export default function ItemsPage() {
   return (
-    <ScrollArea className="min-h-0 w-full flex-1">
+    <ScrollArea>
       <ContentWrapper>
         <ListingHeader
           title="Items"

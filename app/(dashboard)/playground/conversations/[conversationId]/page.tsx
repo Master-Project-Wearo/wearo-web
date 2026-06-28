@@ -12,7 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 export default function ConversationPage() {
   return (
     <>
-      <ScrollArea className="min-h-0 w-full flex-1">
+      <ScrollArea>
         <ContentWrapper>
           <Bubble align="end">
             <BubbleContent>
