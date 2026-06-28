@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { PlusIcon } from "lucide-react"
 
 import { ContentWrapper } from "@/components/content-wrapper"
@@ -8,6 +9,7 @@ import {
   ConversationsTable,
 } from "@/components/conversations-table"
 import { ListingHeader } from "@/components/listing-header"
+import { SearchEmptyState } from "@/components/search-empty-state"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const conversations: Conversation[] = [
@@ -73,7 +75,20 @@ const conversations: Conversation[] = [
   },
 ]
 
+const sortOptions = ["Latest", "Oldest"]
+
 export default function ConversationsPage() {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [sortOrder, setSortOrder] = useState("Latest")
+  const normalizedSearch = searchQuery.trim().toLowerCase()
+  const filteredConversations = conversations.filter((conversation) =>
+    conversation.title.toLowerCase().includes(normalizedSearch)
+  )
+  const visibleConversations =
+    sortOrder === "Oldest"
+      ? [...filteredConversations].reverse()
+      : filteredConversations
+
   return (
     <ScrollArea>
       <ContentWrapper>
@@ -81,16 +96,28 @@ export default function ConversationsPage() {
           title="Conversations"
           description="Find your previous conversations"
           searchPlaceholder="Search for a conversation"
-          resultsCount={conversations.length}
-          sortOptions={["Latest", "Oldest"]}
+          searchValue={searchQuery}
+          resultsCount={visibleConversations.length}
+          sortOptions={sortOptions}
           sortPlaceholder="Sort by"
+          sortValue={sortOrder}
+          onSearchChange={setSearchQuery}
+          onSortChange={setSortOrder}
           action={{
             label: "New conversation",
             icon: PlusIcon,
           }}
         />
 
-        <ConversationsTable conversations={conversations} />
+        {visibleConversations.length > 0 ? (
+          <ConversationsTable conversations={visibleConversations} />
+        ) : (
+          <SearchEmptyState
+            query={searchQuery}
+            resource="conversations"
+            onClearSearch={() => setSearchQuery("")}
+          />
+        )}
       </ContentWrapper>
     </ScrollArea>
   )

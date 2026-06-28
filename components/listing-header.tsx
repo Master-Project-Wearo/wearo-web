@@ -28,9 +28,11 @@ type ListingHeaderProps = {
   title: string
   description?: string
   searchPlaceholder?: string
+  searchValue?: string
   resultsCount?: number
   sortOptions?: string[]
   sortPlaceholder?: string
+  sortValue?: string
   action?: ListingHeaderAction
   onSearchChange?: (value: string) => void
   onSortChange?: (value: string) => void
@@ -40,9 +42,11 @@ export function ListingHeader({
   title,
   description,
   searchPlaceholder = "Search...",
+  searchValue,
   resultsCount,
   sortOptions = [],
   sortPlaceholder = "Sort",
+  sortValue,
   action,
   onSearchChange,
   onSortChange,
@@ -75,16 +79,17 @@ export function ListingHeader({
             type="search"
             className="truncate"
             placeholder={searchPlaceholder}
+            value={searchValue}
             onChange={(event) => onSearchChange?.(event.target.value)}
           />
-          {resultsCount && (
+          {resultsCount !== undefined && (
             <InputGroupAddon className="hidden md:flex" align="inline-end">
-              {resultsCount} results
+              {resultsCount} {resultsCount === 1 ? "result" : "results"}
             </InputGroupAddon>
           )}
         </InputGroup>
         {hasSort && (
-          <Select onValueChange={onSortChange}>
+          <Select value={sortValue} onValueChange={onSortChange}>
             <SelectTrigger className="w-44">
               <SelectValue placeholder={sortPlaceholder} />
             </SelectTrigger>
