@@ -192,7 +192,7 @@ export default function ConversationsPage() {
                 return (
                   <TableRow
                     key={conversation.id}
-                    className="relative cursor-pointer"
+                    className="relative cursor-pointer has-[+tr:hover]:border-transparent has-[+tr_button[aria-expanded=true]]:border-transparent has-aria-expanded:border-transparent has-aria-expanded:bg-transparent has-aria-expanded:[&>td]:bg-muted/50 hover:border-transparent hover:bg-transparent hover:[&>td]:bg-muted/50 [&>td:first-child]:rounded-l-lg [&>td:last-child]:rounded-r-lg"
                   >
                     {selectionMode && (
                       <TableCell className="relative z-10 w-0">
