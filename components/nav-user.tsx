@@ -113,7 +113,7 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem variant="destructive" asChild>
               <button onClick={() => logout()} className="w-full">
                 <LogOutIcon />
                 <span>Log out</span>

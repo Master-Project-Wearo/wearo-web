@@ -11,6 +11,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
@@ -72,7 +73,7 @@ export function ConversationsTable({ conversations }: ConversationsTableProps) {
           </p>
           <div className="flex items-center gap-2">
             <Button
-              variant="secondary"
+              variant="destructive"
               size="sm"
               disabled={selectedIds.size === 0}
             >
@@ -81,7 +82,7 @@ export function ConversationsTable({ conversations }: ConversationsTableProps) {
             </Button>
 
             <Button
-              variant="secondary"
+              variant="outline"
               size="sm"
               disabled={allSelected}
               onClick={selectAll}
@@ -169,6 +170,7 @@ export function ConversationsTable({ conversations }: ConversationsTableProps) {
                         <CheckIcon />
                         Select
                       </DropdownMenuItem>
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem variant="destructive">
                         <Trash2Icon />
                         Delete
