@@ -93,6 +93,9 @@ const conversations: Conversation[] = [
   },
 ]
 
+const rowActionClassName =
+  "absolute inset-0 z-0 rounded-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+
 export default function ConversationsPage() {
   const [selectionMode, setSelectionMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
@@ -172,6 +175,7 @@ export default function ConversationsPage() {
                 <Button
                   variant="ghost"
                   size="icon-sm"
+                  aria-label="Cancel selection"
                   onClick={cancelSelection}
                 >
                   <XIcon />
@@ -180,7 +184,7 @@ export default function ConversationsPage() {
             </div>
           )}
 
-          <Table className="table-fixed">
+          <Table>
             <TableBody>
               {conversations.map((conversation) => {
                 const selected = selectedIds.has(conversation.id)
@@ -188,11 +192,10 @@ export default function ConversationsPage() {
                 return (
                   <TableRow
                     key={conversation.id}
-                    className="group relative cursor-pointer overflow-hidden rounded-lg"
-                    data-state={selected ? "selected" : undefined}
+                    className="relative cursor-pointer"
                   >
                     {selectionMode && (
-                      <TableCell className="relative z-10 w-10 text-left">
+                      <TableCell className="relative z-10 w-0">
                         <Checkbox
                           aria-label={`Select ${conversation.title}`}
                           checked={selected}
@@ -205,11 +208,11 @@ export default function ConversationsPage() {
                         />
                       </TableCell>
                     )}
-                    <TableCell className="overflow-hidden">
+                    <TableCell className="w-full max-w-0 overflow-hidden">
                       {selectionMode ? (
                         <button
                           type="button"
-                          className="absolute inset-0 z-0 cursor-pointer rounded-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                          className={rowActionClassName}
                           onClick={() =>
                             toggleConversation(conversation.id, !selected)
                           }
@@ -222,7 +225,7 @@ export default function ConversationsPage() {
                       ) : (
                         <Link
                           href={`/playground/conversations/${conversation.id}`}
-                          className="absolute inset-0 z-0 rounded-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                          className={rowActionClassName}
                         >
                           <span className="sr-only">
                             Open {conversation.title}
@@ -233,12 +236,12 @@ export default function ConversationsPage() {
                         {conversation.title}
                       </span>
                     </TableCell>
-                    <TableCell className="overflow-hidden text-right text-muted-foreground">
+                    <TableCell className="w-0 max-w-36 overflow-hidden text-right text-muted-foreground">
                       <span className="block truncate">
                         {conversation.updatedLabel}
                       </span>
                     </TableCell>
-                    <TableCell className="relative z-10 w-10 text-right">
+                    <TableCell className="relative z-10 w-0">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
