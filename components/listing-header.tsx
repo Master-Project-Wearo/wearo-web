@@ -51,7 +51,7 @@ export function ListingHeader({
   const hasSort = sortOptions.length > 0
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-4">
           <h1>{title}</h1>
@@ -77,14 +77,14 @@ export function ListingHeader({
             onChange={(event) => onSearchChange?.(event.target.value)}
           />
           {resultsCount && (
-            <InputGroupAddon align="inline-end">
+            <InputGroupAddon className="hidden md:flex" align="inline-end">
               {resultsCount} results
             </InputGroupAddon>
           )}
         </InputGroup>
         {hasSort && (
           <Select onValueChange={onSortChange}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-48">
               <SelectValue placeholder={sortPlaceholder} />
             </SelectTrigger>
             <SelectContent>
@@ -100,6 +100,6 @@ export function ListingHeader({
           </Select>
         )}
       </div>
-    </div>
+    </>
   )
 }
