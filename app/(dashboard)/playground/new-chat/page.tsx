@@ -9,7 +9,7 @@ export default function NewChatPage() {
 
   return (
     <div className="flex flex-1 items-center justify-center">
-      <ContentWrapper className="items-center">
+      <ContentWrapper className="items-center text-center">
         <h1>
           Salut <span className="text-primary">{user?.nickname}</span>, une
           question ?

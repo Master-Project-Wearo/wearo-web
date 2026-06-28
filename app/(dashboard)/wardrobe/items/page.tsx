@@ -30,7 +30,7 @@ export default function ItemsPage() {
           description="Find here your saved items"
           searchPlaceholder="Search for an article"
           resultsCount={12}
-          sortOptions={["By latest", "By cheapest"]}
+          sortOptions={["Latest", "Oldest"]}
           action={{
             label: "Add an item",
             icon: Plus,

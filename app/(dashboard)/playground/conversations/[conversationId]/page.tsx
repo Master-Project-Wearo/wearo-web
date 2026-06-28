@@ -13,6 +13,7 @@ export default function ConversationPage() {
   return (
     <>
       <ScrollArea>
+        <div className="absolute bottom-0 z-10 h-4 w-full bg-linear-to-b from-background/0 to-background" />
         <ContentWrapper>
           <Bubble align="end">
             <BubbleContent>

@@ -84,7 +84,7 @@ export function ListingHeader({
         </InputGroup>
         {hasSort && (
           <Select onValueChange={onSortChange}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-44">
               <SelectValue placeholder={sortPlaceholder} />
             </SelectTrigger>
             <SelectContent>

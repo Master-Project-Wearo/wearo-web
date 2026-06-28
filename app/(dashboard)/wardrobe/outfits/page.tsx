@@ -14,7 +14,7 @@ export default function OutfitsPage() {
           description="Find here your saved outfits"
           searchPlaceholder="Search for an outfit"
           resultsCount={12}
-          sortOptions={["By latest", "By cheapest"]}
+          sortOptions={["Latest", "Oldest"]}
           action={{
             label: "Add an outfit",
             icon: Plus,
