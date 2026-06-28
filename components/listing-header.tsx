@@ -73,6 +73,7 @@ export function ListingHeader({
           </InputGroupAddon>
           <InputGroupInput
             type="search"
+            className="truncate"
             placeholder={searchPlaceholder}
             onChange={(event) => onSearchChange?.(event.target.value)}
           />
