@@ -57,11 +57,14 @@ export function ListingHeader({
   return (
     <>
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-4">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
           <h1>{title}</h1>
           {action && (
-            <Button onClick={action.onClick}>
-              <span>{action.label}</span>
+            <Button
+              className="w-fit max-w-full min-w-0 justify-self-end"
+              onClick={action.onClick}
+            >
+              <span className="block truncate">{action.label}</span>
               {ActionIcon && <ActionIcon />}
             </Button>
           )}
