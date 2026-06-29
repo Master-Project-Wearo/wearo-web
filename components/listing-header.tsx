@@ -41,7 +41,7 @@ type ListingHeaderProps = {
 export function ListingHeader({
   title,
   description,
-  searchPlaceholder = "Search...",
+  searchPlaceholder,
   searchValue,
   resultsCount,
   sortOptions = [],
@@ -52,7 +52,12 @@ export function ListingHeader({
   onSortChange,
 }: ListingHeaderProps) {
   const ActionIcon = action?.icon
+  const hasSearch =
+    searchPlaceholder !== undefined ||
+    searchValue !== undefined ||
+    onSearchChange !== undefined
   const hasSort = sortOptions.length > 0
+  const hasControls = hasSearch || hasSort
 
   return (
     <>
@@ -73,42 +78,46 @@ export function ListingHeader({
           <p className="text-sm text-muted-foreground">{description}</p>
         )}
       </div>
-      <div className="flex gap-2">
-        <InputGroup>
-          <InputGroupAddon>
-            <Search />
-          </InputGroupAddon>
-          <InputGroupInput
-            type="search"
-            className="truncate"
-            placeholder={searchPlaceholder}
-            value={searchValue}
-            onChange={(event) => onSearchChange?.(event.target.value)}
-          />
-          {resultsCount !== undefined && (
-            <InputGroupAddon className="hidden md:flex" align="inline-end">
-              {resultsCount} {resultsCount === 1 ? "result" : "results"}
-            </InputGroupAddon>
+      {hasControls && (
+        <div className="flex gap-2">
+          {hasSearch && (
+            <InputGroup>
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+              <InputGroupInput
+                type="search"
+                className="truncate"
+                placeholder={searchPlaceholder ?? "Search..."}
+                value={searchValue}
+                onChange={(event) => onSearchChange?.(event.target.value)}
+              />
+              {resultsCount !== undefined && (
+                <InputGroupAddon className="hidden md:flex" align="inline-end">
+                  {resultsCount} {resultsCount === 1 ? "result" : "results"}
+                </InputGroupAddon>
+              )}
+            </InputGroup>
           )}
-        </InputGroup>
-        {hasSort && (
-          <Select value={sortValue} onValueChange={onSortChange}>
-            <SelectTrigger className="w-44">
-              <SelectValue placeholder={sortPlaceholder} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>{sortPlaceholder}</SelectLabel>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        )}
-      </div>
+          {hasSort && (
+            <Select value={sortValue} onValueChange={onSortChange}>
+              <SelectTrigger className="w-44">
+                <SelectValue placeholder={sortPlaceholder} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>{sortPlaceholder}</SelectLabel>
+                  {sortOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+      )}
     </>
   )
 }

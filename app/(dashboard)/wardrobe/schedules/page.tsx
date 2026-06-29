@@ -1,3 +1,16 @@
+import { ContentWrapper } from "@/components/content-wrapper"
+import { ListingHeader } from "@/components/listing-header"
+import { ScrollArea } from "@/components/ui/scroll-area"
+
 export default function SchedulesPage() {
-  return <h1 className="text-2xl font-semibold tracking-tight">Schedules</h1>
+  return (
+    <ScrollArea>
+      <ContentWrapper>
+        <ListingHeader
+          title="Schedules"
+          description="Find here your planned outfits"
+        />
+      </ContentWrapper>
+    </ScrollArea>
+  )
 }
