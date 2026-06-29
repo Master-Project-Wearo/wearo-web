@@ -9,7 +9,12 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -21,8 +26,8 @@ import {
 import { logout } from "@/lib/auth/actions"
 import { useAuth, type AuthUser } from "@/providers/auth-provider"
 import {
-  BadgeCheckIcon,
   ChevronsUpDownIcon,
+  LanguagesIcon,
   LogOutIcon,
   SettingsIcon,
   SparklesIcon,
@@ -99,12 +104,22 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href="/account">
-                  <BadgeCheckIcon />
-                  <span>Account</span>
-                </Link>
-              </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <LanguagesIcon />
+                  <span>Language</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup value="english">
+                    <DropdownMenuRadioItem value="english">
+                      English
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="french">
+                      French
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
               <DropdownMenuItem asChild>
                 <Link href="/settings">
                   <SettingsIcon />
