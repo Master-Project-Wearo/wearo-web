@@ -9,7 +9,6 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 type ProfilePictureFieldProps = {
   imageUrl: string
   nickname: string
-  isLoading?: boolean
 }
 
 function getInitials(nickname: string) {
@@ -19,7 +18,6 @@ function getInitials(nickname: string) {
 export function ProfilePictureField({
   imageUrl,
   nickname,
-  isLoading = false,
 }: ProfilePictureFieldProps) {
   return (
     <FieldGroup className="order-1 lg:order-2 lg:items-end">
@@ -28,11 +26,11 @@ export function ProfilePictureField({
 
         <div className="relative w-fit">
           <Avatar className="size-40 sm:size-48">
-            {!isLoading && imageUrl && (
+            {imageUrl && (
               <AvatarImage src={imageUrl} alt={nickname || "Profile picture"} />
             )}
             <AvatarFallback className="text-3xl font-medium">
-              {isLoading ? "..." : getInitials(nickname)}
+              {getInitials(nickname)}
             </AvatarFallback>
           </Avatar>
 

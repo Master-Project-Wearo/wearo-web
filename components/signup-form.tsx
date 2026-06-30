@@ -69,6 +69,7 @@ export function SignupForm({
             value={nickname}
             onChange={(event) => setNickname(event.target.value)}
             placeholder="Adrien"
+            disabled={pending}
             required
             autoComplete="nickname"
             aria-invalid={Boolean(nicknameErrors)}
@@ -93,6 +94,7 @@ export function SignupForm({
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="m@example.com"
+            disabled={pending}
             required
             autoComplete="email"
             aria-invalid={Boolean(emailErrors)}
@@ -117,6 +119,7 @@ export function SignupForm({
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            disabled={pending}
             required
             minLength={8}
             autoComplete="new-password"
@@ -141,6 +144,7 @@ export function SignupForm({
             type="password"
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
+            disabled={pending}
             required
             minLength={8}
             autoComplete="new-password"

@@ -16,11 +16,29 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { SpinnerCustom } from "@/components/ui/spinner"
 import { useCurrentUser } from "@/features/users/hooks"
 
 export default function SettingsPage() {
   const { data: user, isPending, error } = useCurrentUser()
-  const formKey = isPending ? "loading" : (user?.user_id ?? "unavailable")
+
+  if (isPending) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <SpinnerCustom />
+      </div>
+    )
+  }
+
+  if (error || !user) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <p role="alert" className="text-sm text-destructive">
+          Unable to load your profile. Please refresh the page.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <ScrollArea>
@@ -30,12 +48,7 @@ export default function SettingsPage() {
           description="Edit your account information here"
         />
         <SettingsSection title="Profile information">
-          <ProfileInformationForm
-            key={formKey}
-            user={user}
-            isLoading={isPending}
-            hasLoadingError={Boolean(error)}
-          />
+          <ProfileInformationForm key={user.user_id} user={user} />
         </SettingsSection>
         <SettingsSection title="Authentication">
           <Item>
@@ -44,9 +57,7 @@ export default function SettingsPage() {
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Email address</ItemTitle>
-              <ItemDescription>
-                {isPending ? "Loading..." : (user?.email ?? "Unavailable")}
-              </ItemDescription>
+              <ItemDescription>{user.email}</ItemDescription>
             </ItemContent>
             <ItemActions>
               <Button variant="outline">Modify</Button>

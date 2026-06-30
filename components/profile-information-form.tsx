@@ -18,23 +18,13 @@ import { useUpdateCurrentUser } from "@/features/users/hooks"
 import type { User } from "@/features/users/types"
 
 type ProfileInformationFormProps = {
-  user?: User
-  isLoading: boolean
-  hasLoadingError: boolean
+  user: User
 }
 
-export function ProfileInformationForm({
-  user,
-  isLoading,
-  hasLoadingError,
-}: ProfileInformationFormProps) {
-  const loadingValue = isLoading ? "Loading..." : ""
-  const [nickname, setNickname] = useState(user?.nickname ?? loadingValue)
-  const [description, setDescription] = useState(
-    user?.description ?? loadingValue
-  )
+export function ProfileInformationForm({ user }: ProfileInformationFormProps) {
+  const [nickname, setNickname] = useState(user.nickname)
+  const [description, setDescription] = useState(user.description ?? "")
   const updateUser = useUpdateCurrentUser()
-  const isDisabled = isLoading || hasLoadingError || updateUser.isPending
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -43,10 +33,10 @@ export function ProfileInformationForm({
       {
         nickname: nickname.trim(),
         description: description.trim(),
-        imageUrl: user?.profile_picture_url ?? undefined,
+        imageUrl: user.profile_picture_url ?? undefined,
       },
       {
-        onSuccess: () => toast.success("Profile updated."),
+        onSuccess: () => toast.success("Profile updated"),
         onError: (error) => toast.error(error.message),
       }
     )
@@ -65,7 +55,7 @@ export function ProfileInformationForm({
               value={nickname}
               onChange={(event) => setNickname(event.target.value)}
               placeholder="Adrien Cambier"
-              disabled={isDisabled}
+              disabled={updateUser.isPending}
               required
             />
             <FieldDescription>
@@ -80,7 +70,7 @@ export function ProfileInformationForm({
               className="max-w-sm resize-none"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              disabled={isDisabled}
+              disabled={updateUser.isPending}
             />
             <FieldDescription>
               Add a short note about your style, preferences, or wardrobe goals
@@ -88,23 +78,20 @@ export function ProfileInformationForm({
           </Field>
         </FieldGroup>
         <ProfilePictureField
-          imageUrl={user?.profile_picture_url ?? ""}
+          imageUrl={user.profile_picture_url ?? ""}
           nickname={nickname}
-          isLoading={isLoading}
         />
       </div>
-      <div className="flex items-center gap-3">
-        <Button type="submit" className="w-fit" disabled={isDisabled}>
-          {updateUser.isPending ? (
-            <>
-              <Spinner data-icon="inline-start" />
-              Saving updates
-            </>
-          ) : (
-            "Save updates"
-          )}
-        </Button>
-      </div>
+      <Button type="submit" className="w-fit" disabled={updateUser.isPending}>
+        {updateUser.isPending ? (
+          <>
+            <Spinner data-icon="inline-start" />
+            Saving updates
+          </>
+        ) : (
+          "Save updates"
+        )}
+      </Button>
     </form>
   )
 }

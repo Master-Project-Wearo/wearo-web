@@ -55,6 +55,7 @@ export function LoginForm({ className, redirectTo, ...props }: LoginFormProps) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="m@example.com"
+            disabled={pending}
             required
             autoComplete="email"
             aria-invalid={Boolean(emailErrors)}
@@ -71,6 +72,7 @@ export function LoginForm({ className, redirectTo, ...props }: LoginFormProps) {
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            disabled={pending}
             required
             autoComplete="current-password"
             aria-invalid={Boolean(passwordErrors)}
