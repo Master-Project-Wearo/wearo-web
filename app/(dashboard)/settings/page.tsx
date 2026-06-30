@@ -19,7 +19,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import { User } from "lucide-react"
+import { Key, Mail, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function SettingsPage() {
@@ -49,10 +49,37 @@ export default function SettingsPage() {
                 </FieldDescription>
               </Field>
             </FieldGroup>
-
             <ProfilePictureField />
           </div>
           <Button className="w-fit">Save updates</Button>
+        </SettingsSection>
+        <SettingsSection title="Authentication">
+          <Item>
+            <ItemMedia variant="icon">
+              <Mail />
+            </ItemMedia>
+            <ItemContent>
+              <ItemTitle>Email adress</ItemTitle>
+              <ItemDescription>Edit your email adress</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Button variant="outline">Modify</Button>
+            </ItemActions>
+          </Item>
+          <Item>
+            <ItemMedia variant="icon">
+              <Key />
+            </ItemMedia>
+            <ItemContent>
+              <ItemTitle>Google authentication</ItemTitle>
+              <ItemDescription>
+                Link your wearo account to google
+              </ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Button variant="outline">Connect</Button>
+            </ItemActions>
+          </Item>
         </SettingsSection>
         <SettingsSection title="Dangerous zone" variant="destructive">
           <Item variant="muted">
