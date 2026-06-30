@@ -1,18 +1,12 @@
+"use client"
+
+import { Key, Mail, User as UserIcon } from "lucide-react"
+
 import { ContentWrapper } from "@/components/content-wrapper"
 import { ListingHeader } from "@/components/listing-header"
-import { ProfilePictureField } from "@/components/profile-picture-field"
+import { ProfileInformationForm } from "@/components/profile-information-form"
 import { SettingsSection } from "@/components/settings-section"
-import { updateProfileInformation } from "@/lib/auth/actions"
-import { getCurrentAuthUser } from "@/lib/auth/session"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
 import {
   Item,
   ItemActions,
@@ -21,11 +15,12 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import { Key, Mail, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { useCurrentUser } from "@/features/users/hooks"
 
-export default async function SettingsPage() {
-  const user = await getCurrentAuthUser()
+export default function SettingsPage() {
+  const { data: user, isPending, error } = useCurrentUser()
+  const formKey = isPending ? "loading" : (user?.user_id ?? "unavailable")
 
   return (
     <ScrollArea>
@@ -35,41 +30,12 @@ export default async function SettingsPage() {
           description="Edit your account information here"
         />
         <SettingsSection title="Profile information">
-          <form
-            action={updateProfileInformation}
-            className="flex flex-col gap-4"
-          >
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
-              <FieldGroup className="order-2 lg:order-1">
-                <Field>
-                  <FieldLabel htmlFor="nickname">Nickname</FieldLabel>
-                  <Input
-                    id="nickname"
-                    name="nickname"
-                    className="max-w-sm"
-                    defaultValue={user?.nickname ?? ""}
-                    placeholder="Adrien Cambier"
-                    required
-                  />
-                  <FieldDescription>
-                    You can use a nickname or your real name
-                  </FieldDescription>
-                </Field>
-                <Field>
-                  <FieldLabel>Description</FieldLabel>
-                  <Textarea className="max-w-sm resize-none" />
-                  <FieldDescription>
-                    Add a short note about your style, preferences, or wardrobe
-                    goals
-                  </FieldDescription>
-                </Field>
-              </FieldGroup>
-              <ProfilePictureField />
-            </div>
-            <Button type="submit" className="w-fit">
-              Save updates
-            </Button>
-          </form>
+          <ProfileInformationForm
+            key={formKey}
+            user={user}
+            isLoading={isPending}
+            hasLoadingError={Boolean(error)}
+          />
         </SettingsSection>
         <SettingsSection title="Authentication">
           <Item>
@@ -77,8 +43,10 @@ export default async function SettingsPage() {
               <Mail />
             </ItemMedia>
             <ItemContent>
-              <ItemTitle>Email adress</ItemTitle>
-              <ItemDescription>Edit your email adress</ItemDescription>
+              <ItemTitle>Email address</ItemTitle>
+              <ItemDescription>
+                {isPending ? "Loading..." : (user?.email ?? "Unavailable")}
+              </ItemDescription>
             </ItemContent>
             <ItemActions>
               <Button variant="outline">Modify</Button>
@@ -102,7 +70,7 @@ export default async function SettingsPage() {
         <SettingsSection title="Dangerous zone" variant="destructive">
           <Item variant="muted">
             <ItemMedia variant="icon">
-              <User />
+              <UserIcon />
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Delete account</ItemTitle>

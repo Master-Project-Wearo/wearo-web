@@ -1,10 +1,26 @@
+"use client"
+
 import { Pencil } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 
-export function ProfilePictureField() {
+type ProfilePictureFieldProps = {
+  imageUrl: string
+  nickname: string
+  isLoading?: boolean
+}
+
+function getInitials(nickname: string) {
+  return nickname.trim().slice(0, 2).toUpperCase() || "UN"
+}
+
+export function ProfilePictureField({
+  imageUrl,
+  nickname,
+  isLoading = false,
+}: ProfilePictureFieldProps) {
   return (
     <FieldGroup className="order-1 lg:order-2 lg:items-end">
       <Field className="max-w-48">
@@ -12,9 +28,11 @@ export function ProfilePictureField() {
 
         <div className="relative w-fit">
           <Avatar className="size-40 sm:size-48">
-            <AvatarImage src="/avatars/wearo.jpg" alt="Adrien Cambier" />
+            {!isLoading && imageUrl && (
+              <AvatarImage src={imageUrl} alt={nickname || "Profile picture"} />
+            )}
             <AvatarFallback className="text-3xl font-medium">
-              AC
+              {isLoading ? "..." : getInitials(nickname)}
             </AvatarFallback>
           </Avatar>
 
@@ -23,6 +41,7 @@ export function ProfilePictureField() {
             variant="secondary"
             size="icon"
             className="absolute right-4 bottom-4 shadow-sm"
+            aria-label="Profile picture upload coming soon"
           >
             <Pencil />
           </Button>

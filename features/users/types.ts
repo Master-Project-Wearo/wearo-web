@@ -11,5 +11,5 @@ export type User = {
 export type UpdateUserInput = {
   nickname: string
   description: string
-  imageUrl: string
+  imageUrl?: string
 }

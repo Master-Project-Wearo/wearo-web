@@ -3,6 +3,7 @@ import { Geist_Mono, Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from "@/components/ui/sonner"
 import { getCurrentAuthUser } from "@/lib/auth/session"
 import { cn } from "@/lib/utils"
 import { AuthProvider } from "@/providers/auth-provider"
@@ -55,6 +56,7 @@ export default async function RootLayout({
               </AuthProvider>
             </TooltipProvider>
           </QueryProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

@@ -10,6 +10,13 @@ export async function getApiErrorMessage(response: Response) {
     return body.message
   }
 
+  if (
+    Array.isArray(body?.message) &&
+    body.message.every((message) => typeof message === "string")
+  ) {
+    return body.message.join(", ")
+  }
+
   if (typeof body?.detail === "string") {
     return body.detail
   }
