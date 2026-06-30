@@ -18,8 +18,8 @@ Copy `.env.example` to `.env.local` and replace the placeholder with the
 project's publishable key:
 
 ```dotenv
-SUPABASE_URL=https://ficlwdqcgazyxplpgxoc.supabase.co
-SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+NEXT_PUBLIC_SUPABASE_URL=https://ficlwdqcgazyxplpgxoc.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 ```
 
 Authentication is handled by Server Actions in `lib/auth/actions.ts`. Supabase

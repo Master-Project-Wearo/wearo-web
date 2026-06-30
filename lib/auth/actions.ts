@@ -173,20 +173,23 @@ export async function updateProfileInformation(
   }
 
   const { nickname } = validatedFields.data
-  const response = await fetch(`${process.env.SUPABASE_URL!}/auth/v1/user`, {
-    method: "PUT",
-    headers: {
-      apikey: process.env.SUPABASE_PUBLISHABLE_KEY!,
-      Authorization: `Bearer ${session.access_token}`,
-      "Content-Type": "application/json;charset=UTF-8",
-    },
-    body: JSON.stringify({
-      data: {
-        nickname,
-        display_name: nickname,
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL!}/auth/v1/user`,
+    {
+      method: "PUT",
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": "application/json;charset=UTF-8",
       },
-    }),
-  })
+      body: JSON.stringify({
+        data: {
+          nickname,
+          display_name: nickname,
+        },
+      }),
+    }
+  )
 
   if (!response.ok) {
     const error = await response.json().catch(() => null)
