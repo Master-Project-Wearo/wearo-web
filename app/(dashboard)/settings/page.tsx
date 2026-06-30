@@ -2,6 +2,8 @@ import { ContentWrapper } from "@/components/content-wrapper"
 import { ListingHeader } from "@/components/listing-header"
 import { ProfilePictureField } from "@/components/profile-picture-field"
 import { SettingsSection } from "@/components/settings-section"
+import { updateProfileInformation } from "@/lib/auth/actions"
+import { getCurrentAuthUser } from "@/lib/auth/session"
 import {
   Field,
   FieldDescription,
@@ -22,7 +24,9 @@ import {
 import { Key, Mail, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const user = await getCurrentAuthUser()
+
   return (
     <ScrollArea>
       <ContentWrapper className="max-w-5xl">
@@ -31,27 +35,41 @@ export default function SettingsPage() {
           description="Edit your account information here"
         />
         <SettingsSection title="Profile information">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
-            <FieldGroup className="order-2 lg:order-1">
-              <Field>
-                <FieldLabel>Nickname</FieldLabel>
-                <Input className="max-w-sm" placeholder="Adrien Cambier" />
-                <FieldDescription>
-                  You can use a nickname or your real name
-                </FieldDescription>
-              </Field>
-              <Field>
-                <FieldLabel>Description</FieldLabel>
-                <Textarea className="max-w-sm resize-none" />
-                <FieldDescription>
-                  Add a short note about your style, preferences, or wardrobe
-                  goals
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
-            <ProfilePictureField />
-          </div>
-          <Button className="w-fit">Save updates</Button>
+          <form
+            action={updateProfileInformation}
+            className="flex flex-col gap-4"
+          >
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
+              <FieldGroup className="order-2 lg:order-1">
+                <Field>
+                  <FieldLabel htmlFor="nickname">Nickname</FieldLabel>
+                  <Input
+                    id="nickname"
+                    name="nickname"
+                    className="max-w-sm"
+                    defaultValue={user?.nickname ?? ""}
+                    placeholder="Adrien Cambier"
+                    required
+                  />
+                  <FieldDescription>
+                    You can use a nickname or your real name
+                  </FieldDescription>
+                </Field>
+                <Field>
+                  <FieldLabel>Description</FieldLabel>
+                  <Textarea className="max-w-sm resize-none" />
+                  <FieldDescription>
+                    Add a short note about your style, preferences, or wardrobe
+                    goals
+                  </FieldDescription>
+                </Field>
+              </FieldGroup>
+              <ProfilePictureField />
+            </div>
+            <Button type="submit" className="w-fit">
+              Save updates
+            </Button>
+          </form>
         </SettingsSection>
         <SettingsSection title="Authentication">
           <Item>
