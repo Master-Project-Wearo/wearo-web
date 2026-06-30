@@ -15,13 +15,11 @@ function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
 
 function SpinnerCustom() {
   return (
-    <div className="flex items-center gap-4">
-      <LoaderIcon
-        role="status"
-        aria-label="Loading"
-        className="size-4 animate-spin"
-      />
-    </div>
+    <LoaderIcon
+      role="status"
+      aria-label="Loading"
+      className="size-4 animate-spin"
+    />
   )
 }
 
