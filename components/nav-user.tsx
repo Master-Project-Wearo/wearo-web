@@ -43,21 +43,23 @@ function getInitials(name: string) {
     .toUpperCase()
 }
 
-function UserSummary({ user }: { user: AuthUser }) {
-  const initials = getInitials(user.nickname)
+function UserSummary({ user }: { user: AuthUser | null }) {
+  const name = user?.nickname ?? "undefined"
+  const email = user?.email ?? "undefined"
+  const initials = user ? getInitials(user.nickname) : "UN"
 
   return (
     <>
       <Avatar className="h-8 w-8 rounded-lg">
-        <AvatarImage src="/avatars/wearo.jpg" alt={user.nickname} />
+        {user && <AvatarImage src="/avatars/wearo.jpg" alt={user.nickname} />}
         <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
       </Avatar>
       <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
         <span className="truncate font-medium text-foreground">
-          {user.nickname}
+          {name}
         </span>
         <span className="truncate text-xs text-muted-foreground">
-          {user.email}
+          {email}
         </span>
       </div>
     </>
@@ -67,10 +69,6 @@ function UserSummary({ user }: { user: AuthUser }) {
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { user } = useAuth()
-
-  if (!user) {
-    return null
-  }
 
   return (
     <SidebarMenu>
