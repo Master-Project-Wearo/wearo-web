@@ -185,7 +185,7 @@ export default function ConversationPage() {
           </BubbleGroup>
         </ContentWrapper>
       </ScrollArea>
-      <ContentWrapper className="pt-0!">
+      <ContentWrapper className="pt-1!">
         <MessageComposer />
       </ContentWrapper>
     </>

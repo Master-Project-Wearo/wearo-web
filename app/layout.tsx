@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { getCurrentAuthUser } from "@/lib/auth/session"
 import { cn } from "@/lib/utils"
 import { AuthProvider } from "@/providers/auth-provider"
+import { QueryProvider } from "@/providers/query-provider"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -44,14 +45,16 @@ export default async function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <TooltipProvider>
-            <AuthProvider
-              key={getAuthProviderKey(authUser)}
-              initialUser={authUser}
-            >
-              {children}
-            </AuthProvider>
-          </TooltipProvider>
+          <QueryProvider>
+            <TooltipProvider>
+              <AuthProvider
+                key={getAuthProviderKey(authUser)}
+                initialUser={authUser}
+              >
+                {children}
+              </AuthProvider>
+            </TooltipProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
