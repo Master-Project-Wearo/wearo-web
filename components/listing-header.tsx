@@ -106,71 +106,69 @@ export function ListingHeader({
           <p className="text-sm text-muted-foreground">{description}</p>
         )}
       </div>
-      {hasControls ||
-        (hasFilters && (
-          <div className="flex w-full flex-col items-start gap-2.5">
-            {hasControls && (
-              <div className="flex w-full gap-2.5">
-                {hasSearch && (
-                  <InputGroup>
-                    <InputGroupAddon>
-                      <Search />
+      {(hasControls || hasFilters) && (
+        <div className="flex w-full flex-col items-start gap-2.5">
+          {hasControls && (
+            <div className="flex w-full gap-2.5">
+              {hasSearch && (
+                <InputGroup>
+                  <InputGroupAddon>
+                    <Search />
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    type="search"
+                    className="truncate"
+                    placeholder={searchPlaceholder ?? "Search..."}
+                    value={searchValue}
+                    onChange={(event) => onSearchChange?.(event.target.value)}
+                  />
+                  {resultsCount !== undefined && (
+                    <InputGroupAddon
+                      className="hidden md:flex"
+                      align="inline-end"
+                    >
+                      {resultsCount} {resultsCount === 1 ? "result" : "results"}
                     </InputGroupAddon>
-                    <InputGroupInput
-                      type="search"
-                      className="truncate"
-                      placeholder={searchPlaceholder ?? "Search..."}
-                      value={searchValue}
-                      onChange={(event) => onSearchChange?.(event.target.value)}
-                    />
-                    {resultsCount !== undefined && (
-                      <InputGroupAddon
-                        className="hidden md:flex"
-                        align="inline-end"
-                      >
-                        {resultsCount}{" "}
-                        {resultsCount === 1 ? "result" : "results"}
-                      </InputGroupAddon>
-                    )}
-                  </InputGroup>
-                )}
-                {hasSort && (
-                  <Select value={sortValue} onValueChange={onSortChange}>
-                    <SelectTrigger className="w-28">
-                      <SelectValue placeholder={sortPlaceholder} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>{sortPlaceholder}</SelectLabel>
-                        {sortOptions.map((option) => (
-                          <SelectItem key={option} value={option}>
-                            {option}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                )}
-              </div>
-            )}
-            {hasFilters && (
-              <Filters<string>
-                className="w-full"
-                fields={resolvedFilterFields}
-                filters={filters}
-                onChange={onFiltersChange}
-                allowMultiple={false}
-                showSearchInput={filterFields.length > filterSearchThreshold}
-                trigger={
-                  <Button variant="outline">
-                    <FilterIcon />
-                    Add filter
-                  </Button>
-                }
-              />
-            )}
-          </div>
-        ))}
+                  )}
+                </InputGroup>
+              )}
+              {hasSort && (
+                <Select value={sortValue} onValueChange={onSortChange}>
+                  <SelectTrigger className="w-28">
+                    <SelectValue placeholder={sortPlaceholder} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>{sortPlaceholder}</SelectLabel>
+                      {sortOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+          )}
+          {hasFilters && (
+            <Filters<string>
+              className="w-full"
+              fields={resolvedFilterFields}
+              filters={filters}
+              onChange={onFiltersChange}
+              allowMultiple={false}
+              showSearchInput={filterFields.length > filterSearchThreshold}
+              trigger={
+                <Button variant="outline">
+                  <FilterIcon />
+                  Add filter
+                </Button>
+              }
+            />
+          )}
+        </div>
+      )}
     </>
   )
 }
