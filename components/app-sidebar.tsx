@@ -18,10 +18,10 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar"
@@ -36,7 +36,10 @@ import {
   SwatchBookIcon,
 } from "lucide-react"
 
-const data = {
+import { useAiConversations } from "@/features/ai-conversations/hooks"
+import type { AiConversation } from "@/features/ai-conversations/types"
+
+const staticData = {
   teams: [
     {
       name: "Wearo",
@@ -82,39 +85,18 @@ const data = {
         },
       ],
     },
-    {
-      label: "Playground",
-      items: [
-        {
-          title: "New chat",
-          url: "/playground/new-chat",
-          icon: <MessageCirclePlusIcon />,
-        },
-        {
-          title: "Conversations",
-          icon: <BotMessageSquareIcon />,
-          children: [
-            {
-              title: "All conversations",
-              url: "/playground/conversations",
-            },
-            {
-              title: "Capsule office",
-              url: "/playground/conversations/capsule-office",
-            },
-            {
-              title: "Weekend rain",
-              url: "/playground/conversations/rainy-weekend",
-            },
-            {
-              title: "Dinner casual chic",
-              url: "/playground/conversations/date-night",
-            },
-          ],
-        },
-      ],
-    },
   ],
+}
+
+function getConversationUrl(conversationId: string) {
+  return `/playground/conversations/${conversationId}`
+}
+
+function mapConversationToNavItem(conversation: AiConversation) {
+  return {
+    title: conversation.title || "Untitled conversation",
+    url: getConversationUrl(conversation.ai_conversation_id),
+  }
 }
 
 function PrimaryMenu() {
@@ -131,13 +113,15 @@ function PrimaryMenu() {
                 <span>Create</span>
               </SidebarMenuButton>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent
               side={isMobile ? "bottom" : "right"}
               align="start"
               className="w-56"
             >
               <DropdownMenuLabel>Create</DropdownMenuLabel>
-              {data.quickCreateItems.map((item) => (
+
+              {staticData.quickCreateItems.map((item) => (
                 <DropdownMenuItem key={item.title} asChild>
                   <Link href={item.url}>
                     {item.icon}
@@ -148,6 +132,7 @@ function PrimaryMenu() {
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>
+
         <SidebarMenuItem>
           <SidebarMenuButton asChild tooltip="Dashboard">
             <Link href="/dashboard">
@@ -162,18 +147,52 @@ function PrimaryMenu() {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: conversations = [] } = useAiConversations()
+
+  const navGroups = React.useMemo(() => {
+    const conversationItems = conversations.map(mapConversationToNavItem)
+
+    return [
+      ...staticData.navGroups,
+      {
+        label: "Playground",
+        items: [
+          {
+            title: "New chat",
+            url: "/playground/new-chat",
+            icon: <MessageCirclePlusIcon />,
+          },
+          {
+            title: "Conversations",
+            icon: <BotMessageSquareIcon />,
+            children: [
+              {
+                title: "All conversations",
+                url: "/playground/conversations",
+              },
+              ...conversationItems,
+            ],
+          },
+        ],
+      },
+    ]
+  }, [conversations])
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={staticData.teams} />
       </SidebarHeader>
+
       <SidebarContent>
         <PrimaryMenu />
-        <NavMain groups={data.navGroups} />
+        <NavMain groups={navGroups} />
       </SidebarContent>
+
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   )
