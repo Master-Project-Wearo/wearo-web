@@ -98,8 +98,8 @@ export default function DashboardLayout({
               orientation="vertical"
               className="lg:mr-2 data-vertical:h-4 data-vertical:self-auto"
             />
-            <Breadcrumb>
-              <BreadcrumbList>
+            <Breadcrumb className="overflow-hidden">
+              <BreadcrumbList className="flex-nowrap">
                 {/* < lg : ... > lastpage */}
                 <BreadcrumbItem className="lg:hidden">
                   <Button size="icon-sm" variant="ghost">
@@ -141,8 +141,10 @@ export default function DashboardLayout({
                 ))}
 
                 {/* lastpage, rendue une seule fois */}
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{currentBreadcrumb.label}</BreadcrumbPage>
+                <BreadcrumbItem className="min-w-0">
+                  <BreadcrumbPage className="block truncate">
+                    {currentBreadcrumb.label}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
