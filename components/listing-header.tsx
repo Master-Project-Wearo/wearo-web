@@ -1,6 +1,14 @@
 "use client"
 
+import { useMemo } from "react"
 import type { LucideIcon } from "lucide-react"
+import { Filter as FilterIcon, Search } from "lucide-react"
+
+import {
+  Filters,
+  type Filter as ReuiFilter,
+  type FilterFieldConfig,
+} from "@/components/reui/filters"
 import { Button } from "@/components/ui/button"
 import {
   InputGroup,
@@ -16,17 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Filter, Search } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
+export type ListingFilter = ReuiFilter<string>
+export type ListingFilterField = FilterFieldConfig<string>
 
 type ListingHeaderAction = {
   label: string
@@ -44,8 +43,12 @@ type ListingHeaderProps = {
   sortPlaceholder?: string
   sortValue?: string
   action?: ListingHeaderAction
+  filterFields?: ListingFilterField[]
+  filters?: ListingFilter[]
+  filterSearchThreshold?: number
   onSearchChange?: (value: string) => void
   onSortChange?: (value: string) => void
+  onFiltersChange?: (filters: ListingFilter[]) => void
 }
 
 export function ListingHeader({
@@ -58,8 +61,12 @@ export function ListingHeader({
   sortPlaceholder = "Sort",
   sortValue,
   action,
+  filterFields = [],
+  filters = [],
+  filterSearchThreshold = 5,
   onSearchChange,
   onSortChange,
+  onFiltersChange,
 }: ListingHeaderProps) {
   const ActionIcon = action?.icon
   const hasSearch =
@@ -68,6 +75,17 @@ export function ListingHeader({
     onSearchChange !== undefined
   const hasSort = sortOptions.length > 0
   const hasControls = hasSearch || hasSort
+  const hasFilters = filterFields.length > 0 && onFiltersChange !== undefined
+  const resolvedFilterFields = useMemo(
+    () =>
+      filterFields.map((field) => ({
+        ...field,
+        searchable:
+          field.searchable ??
+          (field.options?.length ?? 0) > filterSearchThreshold,
+      })),
+    [filterFields, filterSearchThreshold]
+  )
 
   return (
     <>
@@ -88,73 +106,71 @@ export function ListingHeader({
           <p className="text-sm text-muted-foreground">{description}</p>
         )}
       </div>
-      <div className="flex w-full flex-col items-start gap-2">
-        {hasControls && (
-          <div className="flex w-full gap-2">
-            {hasSearch && (
-              <InputGroup>
-                <InputGroupAddon>
-                  <Search />
-                </InputGroupAddon>
-                <InputGroupInput
-                  type="search"
-                  className="truncate"
-                  placeholder={searchPlaceholder ?? "Search..."}
-                  value={searchValue}
-                  onChange={(event) => onSearchChange?.(event.target.value)}
-                />
-                {resultsCount !== undefined && (
-                  <InputGroupAddon
-                    className="hidden md:flex"
-                    align="inline-end"
-                  >
-                    {resultsCount} {resultsCount === 1 ? "result" : "results"}
-                  </InputGroupAddon>
+      {hasControls ||
+        (hasFilters && (
+          <div className="flex w-full flex-col items-start gap-2.5">
+            {hasControls && (
+              <div className="flex w-full gap-2.5">
+                {hasSearch && (
+                  <InputGroup>
+                    <InputGroupAddon>
+                      <Search />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      type="search"
+                      className="truncate"
+                      placeholder={searchPlaceholder ?? "Search..."}
+                      value={searchValue}
+                      onChange={(event) => onSearchChange?.(event.target.value)}
+                    />
+                    {resultsCount !== undefined && (
+                      <InputGroupAddon
+                        className="hidden md:flex"
+                        align="inline-end"
+                      >
+                        {resultsCount}{" "}
+                        {resultsCount === 1 ? "result" : "results"}
+                      </InputGroupAddon>
+                    )}
+                  </InputGroup>
                 )}
-              </InputGroup>
+                {hasSort && (
+                  <Select value={sortValue} onValueChange={onSortChange}>
+                    <SelectTrigger className="w-28">
+                      <SelectValue placeholder={sortPlaceholder} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>{sortPlaceholder}</SelectLabel>
+                        {sortOptions.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
             )}
-            {hasSort && (
-              <Select value={sortValue} onValueChange={onSortChange}>
-                <SelectTrigger className="w-28">
-                  <SelectValue placeholder={sortPlaceholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>{sortPlaceholder}</SelectLabel>
-                    {sortOptions.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            {hasFilters && (
+              <Filters<string>
+                className="w-full"
+                fields={resolvedFilterFields}
+                filters={filters}
+                onChange={onFiltersChange}
+                allowMultiple={false}
+                showSearchInput={filterFields.length > filterSearchThreshold}
+                trigger={
+                  <Button variant="outline">
+                    <FilterIcon />
+                    Add filter
+                  </Button>
+                }
+              />
             )}
           </div>
-        )}
-        {/*<div className="flex w-full gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="outline">
-                <Filter />
-                Add filter
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-              <DropdownMenuItem>Option 1</DropdownMenuItem>
-              <DropdownMenuItem>Option 2</DropdownMenuItem>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Submenu</DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem>Sub Option 1</DropdownMenuItem>
-                  <DropdownMenuItem>Sub Option 2</DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>*/}
-      </div>
+        ))}
     </>
   )
 }
