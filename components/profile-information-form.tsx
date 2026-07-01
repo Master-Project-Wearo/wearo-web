@@ -25,6 +25,7 @@ export function ProfileInformationForm({ user }: ProfileInformationFormProps) {
   const [nickname, setNickname] = useState(user.nickname)
   const [description, setDescription] = useState(user.description ?? "")
   const updateUser = useUpdateCurrentUser()
+  const isNicknameComplete = nickname.trim().length > 0
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -47,7 +48,7 @@ export function ProfileInformationForm({ user }: ProfileInformationFormProps) {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
         <FieldGroup className="order-2 lg:order-1">
           <Field>
-            <FieldLabel htmlFor="nickname">Nickname</FieldLabel>
+            <FieldLabel htmlFor="nickname">Nickname *</FieldLabel>
             <Input
               id="nickname"
               name="nickname"
@@ -82,7 +83,11 @@ export function ProfileInformationForm({ user }: ProfileInformationFormProps) {
           nickname={nickname}
         />
       </div>
-      <Button type="submit" className="w-fit" disabled={updateUser.isPending}>
+      <Button
+        type="submit"
+        className="w-fit"
+        disabled={updateUser.isPending || !isNicknameComplete}
+      >
         {updateUser.isPending ? (
           <>
             <Spinner data-icon="inline-start" />
