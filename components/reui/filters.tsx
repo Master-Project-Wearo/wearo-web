@@ -230,7 +230,7 @@ const filtersContainerVariants = cva("flex flex-wrap items-center", {
     },
     size: {
       sm: "gap-1.5",
-      default: "gap-2.5",
+      default: "gap-2",
       lg: "gap-3.5",
     },
   },

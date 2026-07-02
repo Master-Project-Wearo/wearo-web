@@ -107,9 +107,9 @@ export function ListingHeader({
         )}
       </div>
       {(hasControls || hasFilters) && (
-        <div className="flex w-full flex-col items-start gap-2.5">
+        <div className="flex w-full flex-col items-start gap-2">
           {hasControls && (
-            <div className="flex w-full gap-2.5">
+            <div className="flex w-full gap-2">
               {hasSearch && (
                 <InputGroup>
                   <InputGroupAddon>
