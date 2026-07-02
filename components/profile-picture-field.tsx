@@ -36,7 +36,7 @@ export function ProfilePictureField({
 
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="icon"
             className="absolute right-4 bottom-4"
             aria-label="Profile picture upload coming soon"
