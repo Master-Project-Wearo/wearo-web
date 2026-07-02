@@ -191,7 +191,7 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
                               {option.swatch && (
                                 <span
                                   aria-hidden="true"
-                                  className="size-2 rounded-full border"
+                                  className="mr-1 size-2 rounded-full border"
                                   style={{ background: option.swatch }}
                                 />
                               )}
