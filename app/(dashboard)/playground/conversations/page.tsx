@@ -85,6 +85,7 @@ export default function ConversationsPage() {
           action={{
             label: "New conversation",
             icon: PlusIcon,
+            href: "/playground/new-chat",
           }}
         />
 

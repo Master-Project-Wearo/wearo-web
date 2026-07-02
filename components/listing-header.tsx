@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import type { LucideIcon } from "lucide-react"
 import { Search } from "lucide-react"
 
@@ -29,6 +30,7 @@ export type ListingFilterField = FilterDrawerField
 type ListingHeaderAction = {
   label: string
   icon?: LucideIcon
+  href?: string
   onClick?: () => void
 }
 
@@ -81,11 +83,21 @@ export function ListingHeader({
           <h1>{title}</h1>
           {action && (
             <Button
+              asChild={Boolean(action.href)}
               className="w-fit max-w-full min-w-0 justify-self-end"
-              onClick={action.onClick}
+              onClick={action.href ? undefined : action.onClick}
             >
-              <span className="block truncate">{action.label}</span>
-              {ActionIcon && <ActionIcon />}
+              {action.href ? (
+                <Link href={action.href}>
+                  <span className="block truncate">{action.label}</span>
+                  {ActionIcon && <ActionIcon />}
+                </Link>
+              ) : (
+                <>
+                  <span className="block truncate">{action.label}</span>
+                  {ActionIcon && <ActionIcon />}
+                </>
+              )}
             </Button>
           )}
         </div>
