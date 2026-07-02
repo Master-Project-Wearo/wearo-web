@@ -1,10 +1,49 @@
 "use client"
 
-import { ContentWrapper } from "@/components/content-wrapper"
-import { ListingHeader } from "@/components/listing-header"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Plus } from "lucide-react"
+import { useState } from "react"
 import Image from "next/image"
+import { Heart, Palette, Plus } from "lucide-react"
+
+import { ContentWrapper } from "@/components/content-wrapper"
+import {
+  ListingHeader,
+  type ListingFilter,
+  type ListingFilterField,
+} from "@/components/listing-header"
+import { ScrollArea } from "@/components/ui/scroll-area"
+
+function createFilterOptions(values: string[]) {
+  return values.map((value) => ({ value, label: value }))
+}
+
+const outfitFilterFields: ListingFilterField[] = [
+  {
+    key: "theme",
+    label: "Theme",
+    description: "Choose one or more outfit themes",
+    type: "multiselect",
+    icon: <Palette />,
+    options: createFilterOptions([
+      "Casual",
+      "Formal",
+      "Minimalist",
+      "Sport",
+      "Streetwear",
+      "Vintage",
+    ]),
+  },
+  {
+    key: "is_favorite",
+    label: "Favorite",
+    description: "Filter by favorite status",
+    type: "boolean",
+    icon: <Heart />,
+    options: [
+      { value: "true", label: "Favorites" },
+      { value: "false", label: "Not favorites" },
+    ],
+  },
+]
 
 const outfits = [
   "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop",
@@ -22,6 +61,8 @@ const outfits = [
 ]
 
 export default function OutfitsPage() {
+  const [filters, setFilters] = useState<ListingFilter[]>([])
+
   return (
     <ScrollArea>
       <ContentWrapper>
@@ -31,6 +72,9 @@ export default function OutfitsPage() {
           searchPlaceholder="Search for an outfit"
           resultsCount={outfits.length}
           sortOptions={["Latest", "Oldest"]}
+          filterFields={outfitFilterFields}
+          filters={filters}
+          onFiltersChange={setFilters}
           action={{
             label: "Add an outfit",
             icon: Plus,

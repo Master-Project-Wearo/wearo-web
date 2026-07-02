@@ -151,7 +151,6 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
                         <PlusIcon className="pointer-events-none block size-4 shrink-0 text-muted-foreground transition-transform duration-500" />
                       </AccordionPrimitive.Trigger>
                     </AccordionPrimitive.Header>
-
                     <AccordionContent className="h-fit">
                       {field.type === "boolean" ? (
                         <Tabs
