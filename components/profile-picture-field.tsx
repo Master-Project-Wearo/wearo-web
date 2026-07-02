@@ -25,7 +25,7 @@ export function ProfilePictureField({
         <FieldLabel>Profile picture</FieldLabel>
 
         <div className="relative w-fit">
-          <Avatar className="size-40 sm:size-48">
+          <Avatar className="size-48">
             {imageUrl && (
               <AvatarImage src={imageUrl} alt={nickname || "Profile picture"} />
             )}
@@ -36,9 +36,9 @@ export function ProfilePictureField({
 
           <Button
             type="button"
-            variant="secondary"
+            variant="outline"
             size="icon"
-            className="absolute right-4 bottom-4 shadow-sm"
+            className="absolute right-4 bottom-4"
             aria-label="Profile picture upload coming soon"
           >
             <Pencil />

@@ -14,7 +14,6 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {
@@ -26,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
+import { ButtonGroup } from "./ui/button-group"
 
 export type Conversation = {
   id: string
@@ -97,33 +97,36 @@ export function ConversationsTable({ conversations }: ConversationsTableProps) {
               </span>{" "}
               selected
             </p>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="destructive"
-                disabled={selectedIds.size === 0}
-                onClick={() => requestDelete([...selectedIds])}
-              >
-                <Trash2Icon />
-                Delete
-              </Button>
-
-              <Button
-                variant="outline"
-                disabled={allSelected}
-                onClick={selectAll}
-              >
-                <CheckIcon />
-                Select all
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Cancel selection"
-                onClick={cancelSelection}
-              >
-                <XIcon />
-              </Button>
-            </div>
+            <ButtonGroup>
+              <ButtonGroup>
+                <Button
+                  variant="outline"
+                  disabled={selectedIds.size === 0}
+                  onClick={() => requestDelete([...selectedIds])}
+                >
+                  <Trash2Icon />
+                  Delete
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={allSelected}
+                  onClick={selectAll}
+                >
+                  <CheckIcon />
+                  Select all
+                </Button>
+              </ButtonGroup>
+              <ButtonGroup>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  aria-label="Cancel selection"
+                  onClick={cancelSelection}
+                >
+                  <XIcon />
+                </Button>
+              </ButtonGroup>
+            </ButtonGroup>
           </div>
         )}
 
