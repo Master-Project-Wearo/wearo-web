@@ -100,7 +100,6 @@ export function ConversationsTable({ conversations }: ConversationsTableProps) {
             <div className="flex items-center gap-2">
               <Button
                 variant="destructive"
-                size="sm"
                 disabled={selectedIds.size === 0}
                 onClick={() => requestDelete([...selectedIds])}
               >
@@ -110,7 +109,6 @@ export function ConversationsTable({ conversations }: ConversationsTableProps) {
 
               <Button
                 variant="outline"
-                size="sm"
                 disabled={allSelected}
                 onClick={selectAll}
               >
@@ -119,7 +117,7 @@ export function ConversationsTable({ conversations }: ConversationsTableProps) {
               </Button>
               <Button
                 variant="ghost"
-                size="icon-sm"
+                size="icon"
                 aria-label="Cancel selection"
                 onClick={cancelSelection}
               >
