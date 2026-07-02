@@ -16,6 +16,40 @@ function createFilterOptions(values: string[]) {
   return values.map((value) => ({ value, label: value }))
 }
 
+const colorFilterOptions = [
+  { value: "Black", label: "Black", swatch: "#171717" },
+  { value: "White", label: "White", swatch: "#ffffff" },
+  { value: "Grey", label: "Grey", swatch: "#8e8e93" },
+  { value: "Charcoal", label: "Charcoal", swatch: "#36454f" },
+  { value: "Cream", label: "Cream", swatch: "#fffdd0" },
+  { value: "Beige", label: "Beige", swatch: "#d9c3a5" },
+  { value: "Tan", label: "Tan", swatch: "#d2b48c" },
+  { value: "Camel", label: "Camel", swatch: "#c19a6b" },
+  { value: "Brown", label: "Brown", swatch: "#7a4b2a" },
+  { value: "Navy", label: "Navy", swatch: "#1f2a44" },
+  { value: "Blue", label: "Blue", swatch: "#2563eb" },
+  { value: "Light blue", label: "Light blue", swatch: "#93c5fd" },
+  { value: "Teal", label: "Teal", swatch: "#0f766e" },
+  { value: "Green", label: "Green", swatch: "#228b22" },
+  { value: "Olive", label: "Olive", swatch: "#6b6b2c" },
+  { value: "Khaki", label: "Khaki", swatch: "#bdb76b" },
+  { value: "Yellow", label: "Yellow", swatch: "#facc15" },
+  { value: "Orange", label: "Orange", swatch: "#f97316" },
+  { value: "Red", label: "Red", swatch: "#dc2626" },
+  { value: "Burgundy", label: "Burgundy", swatch: "#800020" },
+  { value: "Pink", label: "Pink", swatch: "#ec4899" },
+  { value: "Purple", label: "Purple", swatch: "#7e22ce" },
+  { value: "Lavender", label: "Lavender", swatch: "#c4b5fd" },
+  { value: "Gold", label: "Gold", swatch: "#d4af37" },
+  { value: "Silver", label: "Silver", swatch: "#c0c0c0" },
+  {
+    value: "Multicolor",
+    label: "Multicolor",
+    swatch:
+      "conic-gradient(#ef4444, #facc15, #22c55e, #3b82f6, #a855f7, #ef4444)",
+  },
+]
+
 const itemFilterFields: ListingFilterField[] = [
   {
     key: "brand",
@@ -38,16 +72,7 @@ const itemFilterFields: ListingFilterField[] = [
     description: "Choose one or more colors",
     type: "multiselect",
     icon: <Palette />,
-    options: createFilterOptions([
-      "Beige",
-      "Black",
-      "Blue",
-      "Brown",
-      "Green",
-      "Grey",
-      "Red",
-      "White",
-    ]),
+    options: colorFilterOptions,
   },
   {
     key: "is_favorite",

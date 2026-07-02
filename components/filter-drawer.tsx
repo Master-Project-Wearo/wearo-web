@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Accordion as AccordionPrimitive } from "radix-ui"
-import { FilterIcon, MinusIcon, PlusIcon, XIcon } from "lucide-react"
+import { FilterIcon, PlusIcon, XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
@@ -24,6 +24,7 @@ import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
 export type FilterDrawerOption = {
   value: string
   label: string
+  swatch?: string
 }
 
 export type FilterDrawerField = {
@@ -187,6 +188,13 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
                               key={option.value}
                               value={option.value}
                             >
+                              {option.swatch && (
+                                <span
+                                  aria-hidden="true"
+                                  className="size-2 rounded-full border"
+                                  style={{ background: option.swatch }}
+                                />
+                              )}
                               {option.label}
                             </ToggleGroupItem>
                           ))}
