@@ -20,6 +20,7 @@ const itemFilterFields: ListingFilterField[] = [
   {
     key: "brand",
     label: "Brand",
+    description: "Choose one or more brands",
     type: "multiselect",
     icon: <Tags />,
     options: createFilterOptions([
@@ -34,6 +35,7 @@ const itemFilterFields: ListingFilterField[] = [
   {
     key: "colors",
     label: "Color",
+    description: "Choose one or more colors",
     type: "multiselect",
     icon: <Palette />,
     options: createFilterOptions([
@@ -50,7 +52,8 @@ const itemFilterFields: ListingFilterField[] = [
   {
     key: "is_favorite",
     label: "Favorite",
-    type: "select",
+    description: "Filter by favorite status",
+    type: "boolean",
     icon: <Heart />,
     options: [
       { value: "true", label: "Favorites" },
@@ -60,6 +63,7 @@ const itemFilterFields: ListingFilterField[] = [
   {
     key: "type_id",
     label: "Type",
+    description: "Choose one or more item types",
     type: "multiselect",
     icon: <Shirt />,
     options: createFilterOptions([

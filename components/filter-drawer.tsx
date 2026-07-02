@@ -1,11 +1,11 @@
 "use client"
 
-import { useId, useState } from "react"
-import { FilterIcon, PackagePlus, XIcon } from "lucide-react"
+import { useState } from "react"
+import { Accordion as AccordionPrimitive } from "radix-ui"
+import { FilterIcon, MinusIcon, PlusIcon, XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Drawer,
   DrawerClose,
@@ -16,28 +16,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion"
+import { Accordion, AccordionContent, AccordionItem } from "./ui/accordion"
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs"
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
 
@@ -49,8 +29,9 @@ export type FilterDrawerOption = {
 export type FilterDrawerField = {
   key: string
   label: string
+  description?: string
   icon?: React.ReactNode
-  type?: "select" | "multiselect"
+  type?: "multiselect" | "boolean"
   options: FilterDrawerOption[]
 }
 
@@ -67,10 +48,15 @@ type FilterDrawerProps = {
   onChange: (filters: FilterValue[]) => void
 }
 
-const ALL_VALUES = "__all__"
+const allValue = "__all__"
+
+function getFieldDescription(field: FilterDrawerField) {
+  if (field.description) return field.description
+  if (field.type === "boolean") return "Choose between all, true or false"
+  return "Select one or more options"
+}
 
 export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
-  const baseId = useId()
   const [open, setOpen] = useState(false)
   const [draftFilters, setDraftFilters] = useState(filters)
   const activeFilters = filters.filter((filter) => filter.values.length > 0)
@@ -107,7 +93,7 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
         {
           id: field.key,
           field: field.key,
-          operator: field.type === "multiselect" ? "is_any_of" : "is",
+          operator: field.type === "boolean" ? "is" : "is_any_of",
           values,
         },
       ]
@@ -132,45 +118,92 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
           </DrawerHeader>
 
           <ScrollArea className="flex-1 px-4">
-            <Accordion type="multiple">
-              <AccordionItem value="color">
-                <AccordionTrigger>Color</AccordionTrigger>
-                <AccordionContent className="h-fit">
-                  <Tabs>
-                    <TabsList>
-                      <TabsTrigger value="all">All</TabsTrigger>
-                      <TabsTrigger value="favorites">Favorites</TabsTrigger>
-                      <TabsTrigger value="non-favorites">
-                        Non favorites
-                      </TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="test">
-                <AccordionTrigger>Test</AccordionTrigger>
-                <AccordionContent className="h-fit">
-                  <ToggleGroup
-                    variant="outline"
-                    type="multiple"
-                    className="flex-wrap"
-                  >
-                    <ToggleGroupItem value="option1">Option 1</ToggleGroupItem>
-                    <ToggleGroupItem value="option2">
-                      Option 2
-                    </ToggleGroupItem>{" "}
-                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
-                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
-                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
-                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
-                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
-                  </ToggleGroup>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="test2">
-                <AccordionTrigger>Test2</AccordionTrigger>
-                <AccordionContent>Test options will go here.</AccordionContent>
-              </AccordionItem>
+            <Accordion
+              type="multiple"
+              defaultValue={fields[0] ? [fields[0].key] : []}
+            >
+              {fields.map((field) => {
+                const values =
+                  draftFilters.find((filter) => filter.field === field.key)
+                    ?.values ?? []
+                const trueOption = field.options.find(
+                  (option) => option.value === "true"
+                )
+                const falseOption = field.options.find(
+                  (option) => option.value === "false"
+                )
+
+                return (
+                  <AccordionItem key={field.key} value={field.key}>
+                    <AccordionPrimitive.Header className="flex">
+                      <AccordionPrimitive.Trigger
+                        data-slot="accordion-trigger"
+                        className="flex flex-1 items-center justify-between gap-4 rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
+                      >
+                        <span className="flex min-w-0 items-center gap-4">
+                          <span
+                            className="flex size-10 shrink-0 items-center justify-center rounded-full border *:size-4"
+                            aria-hidden="true"
+                          >
+                            {field.icon}
+                          </span>
+                          <span className="flex min-w-0 flex-col space-y-0.5">
+                            <span>{field.label}</span>
+                            <span className="truncate font-normal text-muted-foreground">
+                              {getFieldDescription(field)}
+                            </span>
+                          </span>
+                        </span>
+                        <PlusIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground in-data-open:hidden" />
+                        <MinusIcon className="pointer-events-none hidden size-4 shrink-0 text-muted-foreground in-data-open:block" />
+                      </AccordionPrimitive.Trigger>
+                    </AccordionPrimitive.Header>
+
+                    <AccordionContent>
+                      {field.type === "boolean" ? (
+                        <Tabs
+                          value={values[0] ?? allValue}
+                          onValueChange={(value) =>
+                            updateField(
+                              field,
+                              value === allValue ? [] : [value]
+                            )
+                          }
+                        >
+                          <TabsList className="w-full">
+                            <TabsTrigger value={allValue}>All</TabsTrigger>
+                            <TabsTrigger value="true">
+                              {trueOption?.label ?? "True"}
+                            </TabsTrigger>
+                            <TabsTrigger value="false">
+                              {falseOption?.label ?? "False"}
+                            </TabsTrigger>
+                          </TabsList>
+                        </Tabs>
+                      ) : (
+                        <ToggleGroup
+                          type="multiple"
+                          variant="outline"
+                          value={values}
+                          onValueChange={(nextValues) =>
+                            updateField(field, nextValues)
+                          }
+                          className="w-full flex-wrap"
+                        >
+                          {field.options.map((option) => (
+                            <ToggleGroupItem
+                              key={option.value}
+                              value={option.value}
+                            >
+                              {option.label}
+                            </ToggleGroupItem>
+                          ))}
+                        </ToggleGroup>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                )
+              })}
             </Accordion>
           </ScrollArea>
 
