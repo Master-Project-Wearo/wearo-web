@@ -50,12 +50,6 @@ type FilterDrawerProps = {
 
 const allValue = "__all__"
 
-function getFieldDescription(field: FilterDrawerField) {
-  if (field.description) return field.description
-  if (field.type === "boolean") return "Choose between all, true or false"
-  return "Select one or more options"
-}
-
 export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
   const [open, setOpen] = useState(false)
   const [draftFilters, setDraftFilters] = useState(filters)
@@ -138,28 +132,27 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
                     <AccordionPrimitive.Header className="flex">
                       <AccordionPrimitive.Trigger
                         data-slot="accordion-trigger"
-                        className="flex flex-1 items-center justify-between gap-4 rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
+                        className="flex flex-1 items-center justify-between gap-4 rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
                       >
-                        <span className="flex min-w-0 items-center gap-4">
+                        <span className="flex items-center gap-4">
                           <span
                             className="flex size-10 shrink-0 items-center justify-center rounded-full border *:size-4"
                             aria-hidden="true"
                           >
                             {field.icon}
                           </span>
-                          <span className="flex min-w-0 flex-col space-y-0.5">
+                          <span className="flex flex-col space-y-0.5">
                             <span>{field.label}</span>
-                            <span className="truncate font-normal text-muted-foreground">
-                              {getFieldDescription(field)}
+                            <span className="font-normal text-muted-foreground">
+                              {field.description}
                             </span>
                           </span>
                         </span>
-                        <PlusIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground in-data-open:hidden" />
-                        <MinusIcon className="pointer-events-none hidden size-4 shrink-0 text-muted-foreground in-data-open:block" />
+                        <PlusIcon className="pointer-events-none block size-4 shrink-0 text-muted-foreground transition-transform duration-500" />
                       </AccordionPrimitive.Trigger>
                     </AccordionPrimitive.Header>
 
-                    <AccordionContent>
+                    <AccordionContent className="h-fit">
                       {field.type === "boolean" ? (
                         <Tabs
                           value={values[0] ?? allValue}
