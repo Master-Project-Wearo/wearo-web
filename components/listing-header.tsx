@@ -1,14 +1,13 @@
 "use client"
 
-import { useMemo } from "react"
 import type { LucideIcon } from "lucide-react"
-import { Filter as FilterIcon, Search } from "lucide-react"
+import { Search } from "lucide-react"
 
 import {
-  Filters,
-  type Filter as ReuiFilter,
-  type FilterFieldConfig,
-} from "@/components/reui/filters"
+  FilterDrawer,
+  type FilterDrawerField,
+  type FilterValue,
+} from "@/components/filter-drawer"
 import { Button } from "@/components/ui/button"
 import {
   InputGroup,
@@ -24,8 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-export type ListingFilter = ReuiFilter<string>
-export type ListingFilterField = FilterFieldConfig<string>
+export type ListingFilter = FilterValue
+export type ListingFilterField = FilterDrawerField
 
 type ListingHeaderAction = {
   label: string
@@ -45,7 +44,6 @@ type ListingHeaderProps = {
   action?: ListingHeaderAction
   filterFields?: ListingFilterField[]
   filters?: ListingFilter[]
-  filterSearchThreshold?: number
   onSearchChange?: (value: string) => void
   onSortChange?: (value: string) => void
   onFiltersChange?: (filters: ListingFilter[]) => void
@@ -63,7 +61,6 @@ export function ListingHeader({
   action,
   filterFields = [],
   filters = [],
-  filterSearchThreshold = 5,
   onSearchChange,
   onSortChange,
   onFiltersChange,
@@ -76,16 +73,6 @@ export function ListingHeader({
   const hasSort = sortOptions.length > 0
   const hasControls = hasSearch || hasSort
   const hasFilters = filterFields.length > 0 && onFiltersChange !== undefined
-  const resolvedFilterFields = useMemo(
-    () =>
-      filterFields.map((field) => ({
-        ...field,
-        searchable:
-          field.searchable ??
-          (field.options?.length ?? 0) > filterSearchThreshold,
-      })),
-    [filterFields, filterSearchThreshold]
-  )
 
   return (
     <>
@@ -152,19 +139,10 @@ export function ListingHeader({
             </div>
           )}
           {hasFilters && (
-            <Filters<string>
-              className="w-full"
-              fields={resolvedFilterFields}
+            <FilterDrawer
+              fields={filterFields}
               filters={filters}
               onChange={onFiltersChange}
-              allowMultiple={false}
-              showSearchInput={filterFields.length > filterSearchThreshold}
-              trigger={
-                <Button variant="outline">
-                  <FilterIcon />
-                  Add filter
-                </Button>
-              }
             />
           )}
         </div>
