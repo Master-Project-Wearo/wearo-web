@@ -1,7 +1,7 @@
 "use client"
 
 import { useId, useState } from "react"
-import { FilterIcon, XIcon } from "lucide-react"
+import { FilterIcon, PackagePlus, XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
@@ -32,6 +32,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion"
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs"
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
 
 export type FilterDrawerOption = {
   value: string
@@ -123,84 +131,47 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
             </DrawerDescription>
           </DrawerHeader>
 
-          <ScrollArea>
-            <FieldGroup className="px-4 pb-4">
-              {fields.map((field, fieldIndex) => {
-                const filter = draftFilters.find(
-                  (currentFilter) => currentFilter.field === field.key
-                )
-                const values = filter?.values ?? []
-
-                return (
-                  <FieldSet key={field.key}>
-                    <FieldLegend variant="label">
-                      <span className="flex items-center gap-2">
-                        {field.icon}
-                        {field.label}
-                      </span>
-                    </FieldLegend>
-
-                    {field.type === "multiselect" ? (
-                      <FieldGroup data-slot="checkbox-group">
-                        {field.options.map((option, optionIndex) => {
-                          const optionId = `${baseId}-${fieldIndex}-${optionIndex}`
-                          const isChecked = values.includes(option.value)
-
-                          return (
-                            <Field key={option.value} orientation="horizontal">
-                              <Checkbox
-                                id={optionId}
-                                checked={isChecked}
-                                onCheckedChange={(checked) =>
-                                  updateField(
-                                    field,
-                                    checked === true
-                                      ? [...values, option.value]
-                                      : values.filter(
-                                          (value) => value !== option.value
-                                        )
-                                  )
-                                }
-                              />
-                              <FieldLabel htmlFor={optionId}>
-                                {option.label}
-                              </FieldLabel>
-                            </Field>
-                          )
-                        })}
-                      </FieldGroup>
-                    ) : (
-                      <Select
-                        value={values[0] ?? ALL_VALUES}
-                        onValueChange={(value) =>
-                          updateField(
-                            field,
-                            value === ALL_VALUES ? [] : [value]
-                          )
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Any" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value={ALL_VALUES}>Any</SelectItem>
-                            {field.options.map((option) => (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                              >
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </FieldSet>
-                )
-              })}
-            </FieldGroup>
+          <ScrollArea className="flex-1 px-4">
+            <Accordion type="multiple">
+              <AccordionItem value="color">
+                <AccordionTrigger>Color</AccordionTrigger>
+                <AccordionContent className="h-fit">
+                  <Tabs>
+                    <TabsList>
+                      <TabsTrigger value="all">All</TabsTrigger>
+                      <TabsTrigger value="favorites">Favorites</TabsTrigger>
+                      <TabsTrigger value="non-favorites">
+                        Non favorites
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="test">
+                <AccordionTrigger>Test</AccordionTrigger>
+                <AccordionContent className="h-fit">
+                  <ToggleGroup
+                    variant="outline"
+                    type="multiple"
+                    className="flex-wrap"
+                  >
+                    <ToggleGroupItem value="option1">Option 1</ToggleGroupItem>
+                    <ToggleGroupItem value="option2">
+                      Option 2
+                    </ToggleGroupItem>{" "}
+                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
+                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
+                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
+                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
+                    <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
+                  </ToggleGroup>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="test2">
+                <AccordionTrigger>Test2</AccordionTrigger>
+                <AccordionContent>Test options will go here.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </ScrollArea>
 
           <DrawerFooter>
