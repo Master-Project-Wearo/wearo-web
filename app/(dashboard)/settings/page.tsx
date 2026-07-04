@@ -42,7 +42,7 @@ export default function SettingsPage() {
 
   return (
     <ScrollArea>
-      <ContentWrapper className="max-w-5xl">
+      <ContentWrapper>
         <ListingHeader
           title="Settings"
           description="Edit your account information here"
