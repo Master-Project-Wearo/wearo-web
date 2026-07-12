@@ -4,11 +4,20 @@ import {
   ShirtIcon,
   SparklesIcon,
 } from "lucide-react"
-
 import { ContentWrapper } from "@/components/content-wrapper"
 import { ListingHeader } from "@/components/listing-header"
 import { StatCard } from "@/components/stat-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+import { Button } from "@/components/ui/button"
+import { UserIcon } from "lucide-react"
 
 const stats = [
   {
