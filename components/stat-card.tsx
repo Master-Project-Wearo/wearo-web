@@ -44,7 +44,7 @@ export function StatCard({
         </p>
       </CardContent>
       <CardFooter>
-        <Button asChild className="w-full">
+        <Button asChild className="w-full" variant="outline">
           <Link href={href}>
             {actionLabel}
             <ChevronRightIcon data-icon="inline-end" />
