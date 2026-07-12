@@ -8,18 +8,8 @@ import { ContentWrapper } from "@/components/content-wrapper"
 import { ListingHeader } from "@/components/listing-header"
 import { StatCard } from "@/components/stat-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item"
-import { Button } from "@/components/ui/button"
-import { UserIcon } from "lucide-react"
 
-const stats = [
+const mockDashboardStats = [
   {
     title: "Clothing items",
     description: "All the pieces saved in your wardrobe.",
@@ -63,7 +53,7 @@ export default function DashboardPage() {
           description="A quick overview of your wardrobe and activity."
         />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {stats.map((stat) => (
+          {mockDashboardStats.map((stat) => (
             <StatCard key={stat.title} {...stat} />
           ))}
         </div>
