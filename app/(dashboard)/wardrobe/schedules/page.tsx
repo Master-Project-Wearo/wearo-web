@@ -1,11 +1,26 @@
-import { format } from "date-fns"
-import { redirect } from "next/navigation"
-import { connection } from "next/server"
+"use client"
 
-export default async function SchedulesPage() {
-  await connection()
+import { Plus } from "lucide-react"
+import { ContentWrapper } from "@/components/content-wrapper"
+import { ListingHeader } from "@/components/listing-header"
+import { ScheduleControls } from "@/components/schedule-controls"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
-  const date = new Date()
-
-  redirect(`/wardrobe/schedules/${format(date, "dd-MM-yyyy")}`)
+export default function SchedulesPage() {
+  return (
+    <ScrollArea>
+      <ContentWrapper>
+        <ListingHeader
+          title="Schedules"
+          description="Find here your planned outfits"
+          action={{
+            label: "Add a schedule",
+            icon: Plus,
+            onClick: () => null,
+          }}
+        />
+        <ScheduleControls />
+      </ContentWrapper>
+    </ScrollArea>
+  )
 }
