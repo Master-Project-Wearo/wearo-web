@@ -137,7 +137,7 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
                       >
                         <span className="flex items-center gap-4">
                           <span
-                            className="flex size-10 shrink-0 items-center justify-center rounded-full border *:size-4"
+                            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted *:size-4"
                             aria-hidden="true"
                           >
                             {field.icon}
