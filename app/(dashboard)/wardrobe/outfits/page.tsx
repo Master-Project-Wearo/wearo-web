@@ -81,20 +81,17 @@ export default function OutfitsPage() {
             onClick: () => null,
           }}
         />
-        <div className="flex flex-col gap-2">
-          <p>Outfit list</p>
-          <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
-            {outfits.map((src, index) => (
-              <Image
-                key={index}
-                alt={`Outfit ${index + 1}`}
-                className="aspect-3/4 h-full w-full object-cover"
-                width={400}
-                height={533}
-                src={src}
-              />
-            ))}
-          </div>
+        <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
+          {outfits.map((src, index) => (
+            <Image
+              key={index}
+              alt={`Outfit ${index + 1}`}
+              className="aspect-3/4 h-full w-full object-cover"
+              width={400}
+              height={533}
+              src={src}
+            />
+          ))}
         </div>
       </ContentWrapper>
     </ScrollArea>

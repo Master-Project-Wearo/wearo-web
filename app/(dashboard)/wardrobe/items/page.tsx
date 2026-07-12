@@ -137,20 +137,17 @@ export default function ItemsPage() {
             onClick: () => null,
           }}
         />
-        <div className="flex flex-col gap-2">
-          <p>Item list</p>
-          <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
-            {items.map((src, index) => (
-              <Image
-                key={index}
-                alt={`Item ${index + 1}`}
-                className="aspect-square h-full w-full object-cover"
-                width={400}
-                height={400}
-                src={src}
-              />
-            ))}
-          </div>
+        <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
+          {items.map((src, index) => (
+            <Image
+              key={index}
+              alt={`Item ${index + 1}`}
+              className="aspect-square h-full w-full object-cover"
+              width={400}
+              height={400}
+              src={src}
+            />
+          ))}
         </div>
       </ContentWrapper>
     </ScrollArea>

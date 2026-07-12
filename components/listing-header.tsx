@@ -101,9 +101,7 @@ export function ListingHeader({
             </Button>
           )}
         </div>
-        {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
-        )}
+        {description && <p className="text-muted-foreground">{description}</p>}
       </div>
       {(hasControls || hasFilters) && (
         <div className="flex w-full flex-col items-start gap-2">
