@@ -115,8 +115,7 @@ const messages = [
 export default function ConversationPage() {
   return (
     <>
-      <ScrollArea>
-        <div className="absolute bottom-0 h-4 w-full bg-linear-to-b from-background/0 to-background" />
+      <ScrollArea className="mask-t-from-transparent mask-t-to-4 mask-t-to-black">
         <ContentWrapper>
           {messages.map((message, index) => (
             <ConversationMessage
