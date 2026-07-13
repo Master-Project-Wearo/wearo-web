@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  BotMessageSquare,
   CalendarDaysIcon,
   MessagesSquareIcon,
   ShirtIcon,
@@ -15,7 +14,6 @@ import {
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
-  EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
 import { Button } from "@/components/ui/button"
@@ -71,9 +69,6 @@ export default function DashboardPage() {
         </div>
         <Empty>
           <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <BotMessageSquare />
-            </EmptyMedia>
             <EmptyTitle>Wearo AI</EmptyTitle>
             <EmptyDescription>
               Start a new conversation with your Wearo AI assistant
