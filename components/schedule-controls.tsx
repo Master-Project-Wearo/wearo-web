@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState, useSyncExternalStore } from "react"
-import { addDays, format, isMatch, isValid, parse } from "date-fns"
+import { useState } from "react"
+import { addDays, format } from "date-fns"
 import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -11,91 +11,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Skeleton } from "@/components/ui/skeleton"
 
-const urlDateFormat = "dd-MM-yyyy"
-const locationChangeEvent = "schedule-date-change"
-
-function subscribeToLocation(callback: () => void) {
-  window.addEventListener("popstate", callback)
-  window.addEventListener(locationChangeEvent, callback)
-
-  return () => {
-    window.removeEventListener("popstate", callback)
-    window.removeEventListener(locationChangeEvent, callback)
-  }
+type ScheduleControlsProps = {
+  selectedDate: Date
+  onDateChange: (date: Date) => void
 }
 
-function getLocationSearch() {
-  return window.location.search
-}
-
-function getServerSearch() {
-  return null
-}
-
-function parseUrlDate(value: string | null) {
-  if (!value || !isMatch(value, urlDateFormat)) return null
-
-  const date = parse(value, urlDateFormat, new Date())
-
-  if (!isValid(date) || format(date, urlDateFormat) !== value) return null
-
-  return date
-}
-
-function updateLocation(
-  searchParams: URLSearchParams,
-  mode: "push" | "replace"
-) {
-  const url = `?${searchParams.toString()}`
-
-  if (mode === "replace") {
-    window.history.replaceState(null, "", url)
-  } else {
-    window.history.pushState(null, "", url)
-  }
-
-  window.dispatchEvent(new Event(locationChangeEvent))
-}
-
-export function ScheduleControls() {
+export function ScheduleControls({
+  selectedDate,
+  onDateChange,
+}: ScheduleControlsProps) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const search = useSyncExternalStore(
-    subscribeToLocation,
-    getLocationSearch,
-    getServerSearch
-  )
-  const searchParams = new URLSearchParams(search ?? "")
-  const dateParam = searchParams.get("date")
-  const selectedDate = parseUrlDate(dateParam) ?? new Date()
-  const selectedDateValue = format(selectedDate, urlDateFormat)
-
-  useEffect(() => {
-    if (search === null || dateParam === selectedDateValue) return
-
-    const nextSearchParams = new URLSearchParams(search)
-    nextSearchParams.set("date", selectedDateValue)
-    updateLocation(nextSearchParams, "replace")
-  }, [dateParam, search, selectedDateValue])
-
-  if (search === null) {
-    return <Skeleton className="h-8 w-64" />
-  }
-
-  const currentSearch = search
-
-  function navigateToDate(date: Date) {
-    const nextSearchParams = new URLSearchParams(currentSearch)
-    nextSearchParams.set("date", format(date, urlDateFormat))
-    updateLocation(nextSearchParams, "push")
-  }
 
   function selectCalendarDate(date: Date | undefined) {
     if (!date) return
 
     setIsCalendarOpen(false)
-    navigateToDate(date)
+    onDateChange(date)
   }
 
   return (
@@ -105,7 +37,7 @@ export function ScheduleControls() {
         variant="secondary"
         size="icon"
         aria-label="Previous day"
-        onClick={() => navigateToDate(addDays(selectedDate, -1))}
+        onClick={() => onDateChange(addDays(selectedDate, -1))}
       >
         <ChevronLeftIcon />
       </Button>
@@ -131,7 +63,7 @@ export function ScheduleControls() {
         variant="secondary"
         size="icon"
         aria-label="Next day"
-        onClick={() => navigateToDate(addDays(selectedDate, 1))}
+        onClick={() => onDateChange(addDays(selectedDate, 1))}
       >
         <ChevronRightIcon />
       </Button>
