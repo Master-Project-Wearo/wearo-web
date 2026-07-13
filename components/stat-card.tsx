@@ -23,7 +23,7 @@ export function StatCard({
   icon: Icon,
 }: StatCardProps) {
   return (
-    <Card className="h-full min-h-44">
+    <Card className="h-full min-h-44 bg-linear-to-t from-muted/50 to-card">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
