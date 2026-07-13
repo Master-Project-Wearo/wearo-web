@@ -1,13 +1,10 @@
-import Link from "next/link"
-import { ChevronRightIcon, type LucideIcon } from "lucide-react"
+import { type LucideIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -16,8 +13,6 @@ type StatCardProps = {
   title: string
   description: string
   value: number
-  href: string
-  actionLabel: string
   icon: LucideIcon
 }
 
@@ -25,12 +20,10 @@ export function StatCard({
   title,
   description,
   value,
-  href,
-  actionLabel,
   icon: Icon,
 }: StatCardProps) {
   return (
-    <Card className="h-full">
+    <Card className="h-full min-h-44">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -43,14 +36,6 @@ export function StatCard({
           {value}
         </p>
       </CardContent>
-      <CardFooter>
-        <Button asChild className="w-full" variant="outline">
-          <Link href={href}>
-            {actionLabel}
-            <ChevronRightIcon data-icon="inline-end" />
-          </Link>
-        </Button>
-      </CardFooter>
     </Card>
   )
 }
