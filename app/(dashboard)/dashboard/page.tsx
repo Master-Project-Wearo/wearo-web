@@ -1,4 +1,6 @@
 import {
+  ArrowRight,
+  BotMessageSquare,
   CalendarDaysIcon,
   MessagesSquareIcon,
   ShirtIcon,
@@ -8,6 +10,16 @@ import { ContentWrapper } from "@/components/content-wrapper"
 import { ListingHeader } from "@/components/listing-header"
 import { StatCard } from "@/components/stat-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 const mockDashboardStats = [
   {
@@ -57,6 +69,25 @@ export default function DashboardPage() {
             <StatCard key={stat.title} {...stat} />
           ))}
         </div>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <BotMessageSquare />
+            </EmptyMedia>
+            <EmptyTitle>Wearo AI</EmptyTitle>
+            <EmptyDescription>
+              Start a new conversation with your Wearo AI assistant
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button asChild>
+              <Link href="/playground/new-chat">
+                New Conversation
+                <ArrowRight data-icon="inline-end" />
+              </Link>
+            </Button>
+          </EmptyContent>
+        </Empty>
       </ContentWrapper>
     </ScrollArea>
   )
