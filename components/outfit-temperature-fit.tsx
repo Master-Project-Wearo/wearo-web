@@ -1,7 +1,6 @@
 import { BotMessageSquare, ThermometerSun } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
 import {
   Item,
   ItemContent,
@@ -60,7 +59,7 @@ export function OutfitTemperatureFit({
             AI-recommended range
           </span>
           <span className="tabular-nums-0 font-medium text-nowrap">
-            {formatTemperature(minimumTemperature)} —{" "}
+            {formatTemperature(minimumTemperature)} -{" "}
             {formatTemperature(maximumTemperature)}
           </span>
         </div>
