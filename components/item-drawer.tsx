@@ -1,7 +1,7 @@
 "use client"
 
 import { useId, useState, type FormEvent } from "react"
-import { ChevronDown, DollarSign, Minus, Plus, X } from "lucide-react"
+import { ChevronDown, Euro, Minus, Plus, X } from "lucide-react"
 import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"
@@ -52,6 +52,7 @@ import {
 } from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
 import type { Item, UpdateItemInput } from "@/features/items/types"
+import Image from "next/image"
 
 export type ItemTypeOption = {
   value: string
@@ -238,13 +239,16 @@ function ItemDrawerContent({
         </DrawerDescription>
       </DrawerHeader>
 
-      <ScrollArea className="min-w-0 [&>[data-slot=scroll-area-viewport]]:overflow-x-hidden!">
-        <form
-          id={formId}
-          className="max-w-full min-w-0 px-4 pb-4"
-          onSubmit={handleSubmit}
-        >
-          <FieldGroup className="max-w-full min-w-0">
+      <ScrollArea>
+        <form id={formId} className="px-4" onSubmit={handleSubmit}>
+          <FieldGroup>
+            <Image
+              alt="Item image"
+              className="aspect-square h-full w-full object-cover"
+              width={400}
+              height={400}
+              src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop"
+            />
             <Field>
               <FieldLabel htmlFor="item-name">Name *</FieldLabel>
               <Input
@@ -255,11 +259,9 @@ function ItemDrawerContent({
                 placeholder="Vintage denim jacket"
                 disabled={isSubmitting}
                 autoFocus
-                required
               />
             </Field>
-
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <Field>
                 <FieldLabel htmlFor="item-brand">Brand</FieldLabel>
                 <Input
@@ -280,7 +282,7 @@ function ItemDrawerContent({
                   }
                   disabled={isSubmitting}
                 >
-                  <SelectTrigger id="item-type" className="w-full">
+                  <SelectTrigger id="item-type">
                     <SelectValue placeholder="Choose a type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -294,7 +296,6 @@ function ItemDrawerContent({
                 </Select>
               </Field>
             </div>
-
             <Field>
               <FieldLabel htmlFor="item-price">Price</FieldLabel>
               <ButtonGroup>
@@ -304,7 +305,6 @@ function ItemDrawerContent({
                   size="icon"
                   onClick={() => changePrice(-1)}
                   disabled={isSubmitting || Number(form.price) <= 0}
-                  aria-label="Decrease price by one dollar"
                 >
                   <Minus />
                 </Button>
@@ -323,7 +323,7 @@ function ItemDrawerContent({
                     disabled={isSubmitting}
                   />
                   <InputGroupAddon align="inline-end">
-                    <DollarSign aria-hidden="true" />
+                    <Euro />
                   </InputGroupAddon>
                 </InputGroup>
                 <Button
@@ -332,13 +332,11 @@ function ItemDrawerContent({
                   size="icon"
                   onClick={() => changePrice(1)}
                   disabled={isSubmitting}
-                  aria-label="Increase price by one dollar"
                 >
                   <Plus />
                 </Button>
               </ButtonGroup>
             </Field>
-
             <Field>
               <FieldLabel htmlFor="item-colors">Colors</FieldLabel>
               <Popover open={colorsOpen} onOpenChange={setColorsOpen}>
@@ -426,19 +424,6 @@ function ItemDrawerContent({
               <FieldDescription>
                 Search and select one or more colors.
               </FieldDescription>
-            </Field>
-
-            <Field>
-              <FieldLabel htmlFor="item-image-url">Image URL</FieldLabel>
-              <Input
-                id="item-image-url"
-                name="image_url"
-                type="url"
-                value={form.imageUrl}
-                onChange={(event) => updateForm("imageUrl", event.target.value)}
-                placeholder="https://example.com/item.jpg"
-                disabled={isSubmitting}
-              />
             </Field>
 
             <Field orientation="horizontal">
