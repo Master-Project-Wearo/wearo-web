@@ -92,7 +92,7 @@ export default function SchedulesPage({ searchParams }: SchedulesPageProps) {
               suitableRange={scheduledOutfit.suitableTemperatureRange}
             />
 
-            <div className="mt-auto ml-auto flex gap-2">
+            <div className="mt-auto flex gap-2">
               <Button variant="outline">Replace</Button>
               <Button variant="destructive">
                 Delete
