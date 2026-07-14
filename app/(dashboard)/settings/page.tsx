@@ -5,7 +5,7 @@ import { Key, Mail, User as UserIcon } from "lucide-react"
 import { ContentWrapper } from "@/components/content-wrapper"
 import { ListingHeader } from "@/components/listing-header"
 import { ProfileInformationForm } from "@/components/profile-information-form"
-import { SettingsSection } from "@/components/settings-section"
+import { ContentSection } from "@/components/content-section"
 import { Button } from "@/components/ui/button"
 import {
   Item,
@@ -47,10 +47,10 @@ export default function SettingsPage() {
           title="Settings"
           description="Edit your account information here"
         />
-        <SettingsSection title="Profile information">
+        <ContentSection title="Profile information">
           <ProfileInformationForm key={user.user_id} user={user} />
-        </SettingsSection>
-        <SettingsSection title="Authentication">
+        </ContentSection>
+        <ContentSection title="Authentication">
           <Item>
             <ItemMedia variant="icon">
               <Mail />
@@ -77,8 +77,8 @@ export default function SettingsPage() {
               <Button variant="outline">Connect</Button>
             </ItemActions>
           </Item>
-        </SettingsSection>
-        <SettingsSection title="Dangerous zone" variant="destructive">
+        </ContentSection>
+        <ContentSection title="Dangerous zone" variant="destructive">
           <Item variant="muted">
             <ItemMedia variant="icon">
               <UserIcon />
@@ -95,7 +95,7 @@ export default function SettingsPage() {
               <Button variant="destructive">Delete</Button>
             </ItemActions>
           </Item>
-        </SettingsSection>
+        </ContentSection>
       </ContentWrapper>
     </ScrollArea>
   )

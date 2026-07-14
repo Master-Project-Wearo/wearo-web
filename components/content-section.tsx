@@ -1,16 +1,16 @@
 import { Separator } from "@/components/ui/separator"
 
-type SettingsSectionProps = {
+type ContentSectionProps = {
   title: string
   variant?: "default" | "destructive"
   children: React.ReactNode
 }
 
-export function SettingsSection({
+export function ContentSection({
   title,
   variant = "default",
   children,
-}: SettingsSectionProps) {
+}: ContentSectionProps) {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">

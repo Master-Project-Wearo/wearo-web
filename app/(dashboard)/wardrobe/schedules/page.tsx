@@ -1,18 +1,19 @@
 "use client"
 
 import { use, useEffect } from "react"
-import { format, isMatch, isValid, parse } from "date-fns"
-import { Plus, Trash } from "lucide-react"
+import { addDays, format, isMatch, isValid, parse } from "date-fns"
+import { ArrowLeft, ArrowRight, Plus, Trash } from "lucide-react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 
 import { ContentWrapper } from "@/components/content-wrapper"
+import { ContentSection } from "@/components/content-section"
 import { ListingHeader } from "@/components/listing-header"
 import { OutfitTemperatureFit } from "@/components/outfit-temperature-fit"
 import { ScheduleControls } from "@/components/schedule-controls"
-import { SettingsSection } from "@/components/settings-section"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import Link from "next/link"
 
 const urlDateFormat = "dd-MM-yyyy"
 
@@ -85,7 +86,7 @@ export default function SchedulesPage({ searchParams }: SchedulesPageProps) {
             height={533}
             src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop"
           />
-          <SettingsSection title={scheduledOutfit.name}>
+          <ContentSection title={scheduledOutfit.name}>
             <OutfitTemperatureFit
               currentTemperature={scheduledOutfit.currentTemperature}
               suitableRange={scheduledOutfit.suitableTemperatureRange}
@@ -98,7 +99,34 @@ export default function SchedulesPage({ searchParams }: SchedulesPageProps) {
                 <Trash />
               </Button>
             </div>
-          </SettingsSection>
+          </ContentSection>
+        </div>
+        <ContentSection title="Need help?">
+          <p className="text-sm">
+            Ask a specific question about your scheduled outfit{" "}
+            <Link href="#" className="underline underline-offset-4">
+              here
+            </Link>
+            .
+          </p>
+        </ContentSection>
+        <div className="mt-auto flex justify-between">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => changeDate(addDays(selectedDate, -1))}
+          >
+            <ArrowLeft />
+            Previous
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => changeDate(addDays(selectedDate, 1))}
+          >
+            Next
+            <ArrowRight />
+          </Button>
         </div>
       </ContentWrapper>
     </ScrollArea>
