@@ -47,7 +47,7 @@ export function OutfitTemperatureFit({
         variant={isSuitable ? "secondary" : "destructive"}
         className={cn(
           isSuitable &&
-            "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+            "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
         )}
       >
         <ThermometerSun />
