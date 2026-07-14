@@ -1,12 +1,21 @@
 "use client"
 
-import { useState, type FormEvent, type KeyboardEvent } from "react"
-import { Plus, X } from "lucide-react"
+import { useId, useState, type FormEvent } from "react"
+import { ChevronDown, DollarSign, Minus, Plus, X } from "lucide-react"
 import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { ButtonGroup } from "@/components/ui/button-group"
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
 import {
   Drawer,
   DrawerClose,
@@ -23,6 +32,16 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Select,
@@ -32,7 +51,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
 import type { Item, UpdateItemInput } from "@/features/items/types"
 
 export type ItemTypeOption = {
@@ -62,6 +80,21 @@ type ItemFormState = {
 
 const noTypeValue = "__no_type__"
 
+const testColorOptions = [
+  { value: "Black", swatch: "#171717" },
+  { value: "White", swatch: "#ffffff" },
+  { value: "Grey", swatch: "#8e8e93" },
+  { value: "Beige", swatch: "#d9c3a5" },
+  { value: "Brown", swatch: "#7a4b2a" },
+  { value: "Blue", swatch: "#2563eb" },
+  { value: "Green", swatch: "#228b22" },
+  { value: "Yellow", swatch: "#facc15" },
+  { value: "Orange", swatch: "#f97316" },
+  { value: "Red", swatch: "#dc2626" },
+  { value: "Pink", swatch: "#ec4899" },
+  { value: "Purple", swatch: "#7e22ce" },
+] as const
+
 const emptyFormState: ItemFormState = {
   name: "",
   brand: "",
@@ -74,13 +107,29 @@ const emptyFormState: ItemFormState = {
   isFavorite: false,
 }
 
+function formatPrice(value: string | null) {
+  if (!value) return ""
+
+  const price = Number(value.replace(",", "."))
+  return Number.isFinite(price) ? Math.max(0, price).toFixed(2) : ""
+}
+
+function sanitizePrice(value: string) {
+  const normalizedValue = value.replace(",", ".").replace(/[^\d.]/g, "")
+  const [integerPart = "", ...decimalParts] = normalizedValue.split(".")
+  const hasDecimalSeparator = normalizedValue.includes(".")
+  const decimalPart = decimalParts.join("").slice(0, 2)
+
+  return integerPart + (hasDecimalSeparator ? "." + decimalPart : "")
+}
+
 function getFormState(item?: Item): ItemFormState {
   if (!item) return emptyFormState
 
   return {
     name: item.name,
     brand: item.brand ?? "",
-    price: item.price ?? "",
+    price: formatPrice(item.price),
     typeId: item.type_id ?? "",
     colors: item.colors,
     imageUrl: item.image_url ?? "",
@@ -105,7 +154,7 @@ export function ItemDrawer({
   return (
     <Drawer direction="right" open={open} onOpenChange={onOpenChange}>
       <ItemDrawerContent
-        key={`${item?.item_id ?? "create"}:${open}`}
+        key={(item?.item_id ?? "create") + ":" + open}
         onOpenChange={onOpenChange}
         item={item}
         typeOptions={typeOptions}
@@ -121,8 +170,9 @@ function ItemDrawerContent({
   typeOptions = [],
   onSubmit,
 }: Omit<ItemDrawerProps, "open">) {
+  const formId = useId()
   const [form, setForm] = useState<ItemFormState>(() => getFormState(item))
-  const [colorInput, setColorInput] = useState("")
+  const [colorsOpen, setColorsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isEditing = Boolean(item)
 
@@ -133,26 +183,18 @@ function ItemDrawerContent({
     setForm((currentForm) => ({ ...currentForm, [key]: value }))
   }
 
-  function addColor() {
-    const color = colorInput.trim().replace(/,$/, "")
-    const isDuplicate = form.colors.some(
-      (currentColor) => currentColor.toLowerCase() === color.toLowerCase()
-    )
-
-    if (color.length === 0 || isDuplicate) {
-      setColorInput("")
-      return
-    }
-
-    updateForm("colors", [...form.colors, color])
-    setColorInput("")
+  function changePrice(amount: number) {
+    const currentPrice = Number(form.price) || 0
+    updateForm("price", Math.max(0, currentPrice + amount).toFixed(2))
   }
 
-  function handleColorKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter" || event.key === ",") {
-      event.preventDefault()
-      addColor()
-    }
+  function toggleColor(color: string) {
+    updateForm(
+      "colors",
+      form.colors.includes(color)
+        ? form.colors.filter((currentColor) => currentColor !== color)
+        : [...form.colors, color]
+    )
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -186,7 +228,7 @@ function ItemDrawerContent({
   }
 
   return (
-    <DrawerContent className="sm:max-w-lg">
+    <DrawerContent>
       <DrawerHeader>
         <DrawerTitle>{isEditing ? "Modify item" : "Create item"}</DrawerTitle>
         <DrawerDescription>
@@ -196,9 +238,13 @@ function ItemDrawerContent({
         </DrawerDescription>
       </DrawerHeader>
 
-      <form className="flex min-h-0 flex-1 flex-col" onSubmit={handleSubmit}>
-        <ScrollArea className="px-4">
-          <FieldGroup className="pb-4">
+      <ScrollArea className="min-w-0 [&>[data-slot=scroll-area-viewport]]:overflow-x-hidden!">
+        <form
+          id={formId}
+          className="max-w-full min-w-0 px-4 pb-4"
+          onSubmit={handleSubmit}
+        >
+          <FieldGroup className="max-w-full min-w-0">
             <Field>
               <FieldLabel htmlFor="item-name">Name *</FieldLabel>
               <Input
@@ -213,7 +259,7 @@ function ItemDrawerContent({
               />
             </Field>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-4">
               <Field>
                 <FieldLabel htmlFor="item-brand">Brand</FieldLabel>
                 <Input
@@ -226,95 +272,159 @@ function ItemDrawerContent({
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor="item-price">Price</FieldLabel>
-                <Input
-                  id="item-price"
-                  name="price"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={form.price}
-                  onChange={(event) => updateForm("price", event.target.value)}
-                  placeholder="89.99"
+                <FieldLabel htmlFor="item-type">Type</FieldLabel>
+                <Select
+                  value={form.typeId || noTypeValue}
+                  onValueChange={(value) =>
+                    updateForm("typeId", value === noTypeValue ? "" : value)
+                  }
                   disabled={isSubmitting}
-                />
+                >
+                  <SelectTrigger id="item-type" className="w-full">
+                    <SelectValue placeholder="Choose a type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={noTypeValue}>No type</SelectItem>
+                    {typeOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </Field>
             </div>
 
             <Field>
-              <FieldLabel htmlFor="item-type">Type</FieldLabel>
-              <Select
-                value={form.typeId || noTypeValue}
-                onValueChange={(value) =>
-                  updateForm("typeId", value === noTypeValue ? "" : value)
-                }
-                disabled={isSubmitting}
-              >
-                <SelectTrigger id="item-type" className="w-full">
-                  <SelectValue placeholder="Choose an item type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={noTypeValue}>No type</SelectItem>
-                  {typeOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
-
-            <Field>
-              <FieldLabel htmlFor="item-color">Colors</FieldLabel>
-              <div className="flex gap-2">
-                <Input
-                  id="item-color"
-                  value={colorInput}
-                  onChange={(event) => setColorInput(event.target.value)}
-                  onKeyDown={handleColorKeyDown}
-                  placeholder="Blue"
-                  disabled={isSubmitting}
-                />
+              <FieldLabel htmlFor="item-price">Price</FieldLabel>
+              <ButtonGroup>
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
-                  onClick={addColor}
-                  disabled={isSubmitting || colorInput.trim().length === 0}
-                  aria-label="Add color"
+                  onClick={() => changePrice(-1)}
+                  disabled={isSubmitting || Number(form.price) <= 0}
+                  aria-label="Decrease price by one dollar"
+                >
+                  <Minus />
+                </Button>
+                <InputGroup className="min-w-0 flex-1">
+                  <InputGroupInput
+                    id="item-price"
+                    name="price"
+                    inputMode="decimal"
+                    value={form.price}
+                    onChange={(event) =>
+                      updateForm("price", sanitizePrice(event.target.value))
+                    }
+                    onBlur={() => updateForm("price", formatPrice(form.price))}
+                    placeholder="000.00"
+                    className="text-right font-mono tabular-nums"
+                    disabled={isSubmitting}
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <DollarSign aria-hidden="true" />
+                  </InputGroupAddon>
+                </InputGroup>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => changePrice(1)}
+                  disabled={isSubmitting}
+                  aria-label="Increase price by one dollar"
                 >
                   <Plus />
                 </Button>
-              </div>
+              </ButtonGroup>
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="item-colors">Colors</FieldLabel>
+              <Popover open={colorsOpen} onOpenChange={setColorsOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="item-colors"
+                    type="button"
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={colorsOpen}
+                    className="w-full justify-between font-normal"
+                    disabled={isSubmitting}
+                  >
+                    <span className="truncate">
+                      {form.colors.length > 0
+                        ? form.colors.length + " selected"
+                        : "Search and select colors"}
+                    </span>
+                    <ChevronDown className="text-muted-foreground" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="start"
+                  className="w-(--radix-popover-trigger-width) p-0"
+                >
+                  <Command>
+                    <CommandInput placeholder="Search a color..." />
+                    <CommandList>
+                      <CommandEmpty>No color found.</CommandEmpty>
+                      <CommandGroup>
+                        {testColorOptions.map((color) => (
+                          <CommandItem
+                            key={color.value}
+                            value={color.value}
+                            data-checked={form.colors.includes(color.value)}
+                            onSelect={() => toggleColor(color.value)}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="size-3 rounded-full border"
+                              style={{ backgroundColor: color.swatch }}
+                            />
+                            {color.value}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+
               {form.colors.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
-                  {form.colors.map((color) => (
-                    <Badge key={color} variant="secondary" className="pr-0.5">
-                      {color}
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon-xs"
-                        className="size-4 rounded-full"
-                        onClick={() =>
-                          updateForm(
-                            "colors",
-                            form.colors.filter(
-                              (currentColor) => currentColor !== color
-                            )
-                          )
-                        }
-                        disabled={isSubmitting}
-                        aria-label={"Remove " + color}
-                      >
-                        <X />
-                      </Button>
-                    </Badge>
-                  ))}
+                  {form.colors.map((color) => {
+                    const colorOption = testColorOptions.find(
+                      (option) => option.value === color
+                    )
+
+                    return (
+                      <Badge key={color} variant="secondary" className="pr-0.5">
+                        {colorOption && (
+                          <span
+                            aria-hidden="true"
+                            className="size-2 rounded-full border"
+                            style={{ backgroundColor: colorOption.swatch }}
+                          />
+                        )}
+                        {color}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon-xs"
+                          className="size-4 rounded-full"
+                          onClick={() => toggleColor(color)}
+                          disabled={isSubmitting}
+                          aria-label={"Remove " + color}
+                        >
+                          <X />
+                        </Button>
+                      </Badge>
+                    )
+                  })}
                 </div>
               )}
               <FieldDescription>
-                Press Enter or comma to add a color.
+                Search and select one or more colors.
               </FieldDescription>
             </Field>
 
@@ -331,34 +441,6 @@ function ItemDrawerContent({
               />
             </Field>
 
-            <Field>
-              <FieldLabel htmlFor="item-web-url">Product URL</FieldLabel>
-              <Input
-                id="item-web-url"
-                name="web_url"
-                type="url"
-                value={form.webUrl}
-                onChange={(event) => updateForm("webUrl", event.target.value)}
-                placeholder="https://example.com/product"
-                disabled={isSubmitting}
-              />
-            </Field>
-
-            <Field>
-              <FieldLabel htmlFor="item-description">Description</FieldLabel>
-              <Textarea
-                id="item-description"
-                name="ai_description"
-                value={form.description}
-                onChange={(event) =>
-                  updateForm("description", event.target.value)
-                }
-                placeholder="Fit, material, condition, styling notes..."
-                className="min-h-24 resize-none"
-                disabled={isSubmitting}
-              />
-            </Field>
-
             <Field orientation="horizontal">
               <Checkbox
                 id="item-favorite"
@@ -371,24 +453,24 @@ function ItemDrawerContent({
               <FieldLabel htmlFor="item-favorite">Add to favorites</FieldLabel>
             </Field>
           </FieldGroup>
-        </ScrollArea>
+        </form>
+      </ScrollArea>
 
-        <DrawerFooter>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting && <Spinner data-icon="inline-start" />}
-            {isSubmitting
-              ? "Saving..."
-              : isEditing
-                ? "Modify item"
-                : "Create item"}
+      <DrawerFooter>
+        <Button type="submit" form={formId} disabled={isSubmitting}>
+          {isSubmitting && <Spinner data-icon="inline-start" />}
+          {isSubmitting
+            ? "Saving..."
+            : isEditing
+              ? "Modify item"
+              : "Create item"}
+        </Button>
+        <DrawerClose asChild>
+          <Button type="button" variant="outline" disabled={isSubmitting}>
+            Cancel
           </Button>
-          <DrawerClose asChild>
-            <Button type="button" variant="outline" disabled={isSubmitting}>
-              Cancel
-            </Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </form>
+        </DrawerClose>
+      </DrawerFooter>
     </DrawerContent>
   )
 }

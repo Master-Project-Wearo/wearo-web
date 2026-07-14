@@ -112,7 +112,7 @@ export function FilterDrawer({ fields, filters, onChange }: FilterDrawerProps) {
             </DrawerDescription>
           </DrawerHeader>
 
-          <ScrollArea className="flex-1 px-4">
+          <ScrollArea className="px-4">
             <Accordion
               type="multiple"
               defaultValue={fields[0] ? [fields[0].key] : []}
