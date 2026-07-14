@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Heart, Palette, Plus, Shirt, Tags } from "lucide-react"
 
 import { ContentWrapper } from "@/components/content-wrapper"
+import { ItemDrawer } from "@/components/item-drawer"
 import {
   ListingHeader,
   type ListingFilter,
@@ -118,6 +119,7 @@ const items = [
 
 export default function ItemsPage() {
   const [filters, setFilters] = useState<ListingFilter[]>([])
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   return (
     <ScrollArea>
@@ -134,7 +136,7 @@ export default function ItemsPage() {
           action={{
             label: "Add an item",
             icon: Plus,
-            onClick: () => null,
+            onClick: () => setDrawerOpen(true),
           }}
         />
         <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
@@ -150,6 +152,7 @@ export default function ItemsPage() {
           ))}
         </div>
       </ContentWrapper>
+      <ItemDrawer open={drawerOpen} onOpenChange={setDrawerOpen} />
     </ScrollArea>
   )
 }

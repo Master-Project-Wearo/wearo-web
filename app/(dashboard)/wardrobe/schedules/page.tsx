@@ -78,7 +78,7 @@ export default function SchedulesPage({ searchParams }: SchedulesPageProps) {
           selectedDate={selectedDate}
           onDateChange={changeDate}
         />
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <Image
             alt="Outfit 1"
             className="aspect-3/4 h-full w-full object-cover"
