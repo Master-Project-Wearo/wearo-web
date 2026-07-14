@@ -34,7 +34,7 @@ export function ScheduleControls({
     <div className="flex gap-2 self-start">
       <Button
         type="button"
-        variant="secondary"
+        variant="outline"
         size="icon"
         aria-label="Previous day"
         onClick={() => onDateChange(addDays(selectedDate, -1))}
@@ -43,7 +43,7 @@ export function ScheduleControls({
       </Button>
       <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
         <PopoverTrigger asChild>
-          <Button type="button" variant="secondary" className="min-w-40">
+          <Button type="button" variant="outline" className="min-w-40">
             <CalendarIcon />
             {format(selectedDate, "PPP")}
           </Button>
@@ -60,7 +60,7 @@ export function ScheduleControls({
       </Popover>
       <Button
         type="button"
-        variant="secondary"
+        variant="outline"
         size="icon"
         aria-label="Next day"
         onClick={() => onDateChange(addDays(selectedDate, 1))}
